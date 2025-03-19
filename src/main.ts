@@ -1,4 +1,7 @@
-// Listen for the extension icon click
-chrome.action.onClicked.addListener((tab) => {
-  console.log('hi)')
-});
+const repoName = document.querySelector('strong[itemprop="name"]')?.textContent;
+console.log(repoName);
+
+
+const newTitle = document.createElement('h1');
+newTitle.textContent = repoName ?? '';
+document.body.appendChild(newTitle);
