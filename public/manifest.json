@@ -1,0 +1,25 @@
+{
+  "name": "Pr Helper Extension",
+  "description": "Show number of unactioned comments",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "main.js"
+      ]
+    }
+  ],
+  "action": {},
+  "background": {
+    "service_worker": "background.js"
+  }
+}
