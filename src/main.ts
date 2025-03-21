@@ -1,7 +1,11 @@
-const repoName = document.querySelector('strong[itemprop="name"]')?.textContent;
-console.log(repoName);
+import { CommentData } from './CommentData';
 
+const unresolvedComments = document.querySelectorAll('div.js-comments-holder');
+const resolvedComments = document.querySelectorAll('.js-toggle-outdated-comments')
+const numberOfComments = unresolvedComments.length + resolvedComments.length;
+const assignee = document.querySelector('.author')?.textContent ?? 'Unknown assignee'
 
-const newTitle = document.createElement('h1');
-newTitle.textContent = repoName ?? '';
-document.body.appendChild(newTitle);
+const commentData = [...unresolvedComments].map((commentElement) => {
+  return new CommentData(commentElement, assignee);
+});
+
