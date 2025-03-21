@@ -5,7 +5,7 @@ export class CommentData {
     this.hasBeenActioned = this.hasReaction() || this.isLastReplyFromAssignee()
   }
 
-  private isLastReplyFromAssignee = () => {
+  isLastReplyFromAssignee = () => {
     const replies = this.commentElement.children;
     const hasReplies = this.commentElement.children.length > 1;
     if (!hasReplies) {
@@ -16,9 +16,9 @@ export class CommentData {
     return lastReply.querySelector('.author')?.textContent === this.assignee;
   };
 
-  private hasReaction = () => !!this.commentElement.querySelector('.social-reaction-summary-item')?.textContent;
+  hasReaction = () => !!this.commentElement.querySelector('.social-reaction-summary-item')?.textContent;
 
-  private getCommentTitle = (commentElement: HTMLElement): string => {
+  getCommentTitle = (commentElement: HTMLElement): string => {
     return 'harry potter';
   };
 }
