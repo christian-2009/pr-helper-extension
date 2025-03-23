@@ -1,11 +1,29 @@
-import { CommentData } from './CommentData';
+import { prHelperExtension } from './modules';
+import { PR_FILES_URL_REGEX } from './constants';
 
-const unresolvedComments = document.querySelectorAll('div.js-comments-holder');
-const resolvedComments = document.querySelectorAll('.js-toggle-outdated-comments')
-const numberOfComments = unresolvedComments.length + resolvedComments.length;
-const assignee = document.querySelector('.author')?.textContent ?? 'Unknown assignee'
+const observeUrlChange = () => {
+  let oldHref = document.location.href;
 
-const commentData = [...unresolvedComments].map((commentElement) => {
-  return new CommentData(commentElement, assignee);
+  // callback to be run when href changes
+  const observer = new MutationObserver(_ => {
+    const newHref = document.location.href;
+    if (oldHref !== newHref) {
+      oldHref = newHref;
+    }
+    if (PR_FILES_URL_REGEX.test(oldHref)) {
+      prHelperExtension();
+    }
+  });
+
+  observer.observe(document, {
+    attributes: true,
+    subtree: true,
+    attributeFilter: ['href']
+  });
+};
+
+window.addEventListener('load', () => {
+  prHelperExtension();
+  observeUrlChange();
 });
 
