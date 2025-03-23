@@ -1,3 +1,5 @@
+import { ASSIGNEE_SELECTOR, REACTION_SELECTOR } from './constants';
+
 export class CommentData {
   hasBeenActioned: boolean;
 
@@ -13,10 +15,10 @@ export class CommentData {
     }
 
     const lastReply = replies[replies.length - 1];
-    return lastReply.querySelector('.author')?.textContent === this.assignee;
+    return lastReply.querySelector(ASSIGNEE_SELECTOR)?.textContent === this.assignee;
   };
 
-  hasReaction = () => !!this.commentElement.querySelector('.social-reaction-summary-item')?.textContent;
+  hasReaction = () => !!this.commentElement.querySelector(REACTION_SELECTOR)?.textContent;
 
   getCommentTitle = (commentElement: HTMLElement): string => {
     return 'harry potter';
