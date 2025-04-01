@@ -4,11 +4,17 @@ export const renderCommentInfo = (
   numberActionedComments: number,
   totalNumberOfComments: number
 ) => {
-  const container = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
+  const commentsActionedItem = document.querySelector('.comments-actioned');
 
-  const commentsActionedItem = document.createElement('div');
-  commentsActionedItem.classList.add('comments-actioned');
-  commentsActionedItem.textContent = `${numberActionedComments}/${totalNumberOfComments} have been actioned`;
-  container?.appendChild(commentsActionedItem);
+  if (commentsActionedItem) {
+    commentsActionedItem.textContent = `${numberActionedComments}/${totalNumberOfComments} have been actioned`;
+    return;
+  }
+
+  const container = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
+  const firstRenderCommentsActionedItem = document.createElement('div');
+  firstRenderCommentsActionedItem.classList.add('comments-actioned');
+  firstRenderCommentsActionedItem.textContent = `${numberActionedComments}/${totalNumberOfComments} have been actioned`;
+  container?.appendChild(firstRenderCommentsActionedItem);
 
 };

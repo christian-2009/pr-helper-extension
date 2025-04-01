@@ -4,7 +4,7 @@ export class CommentData {
   hasBeenActioned: boolean;
 
   constructor(public commentElement: Element, public assignee: string) {
-    this.hasBeenActioned = this.hasReaction() || this.isLastReplyFromAssignee()
+    this.hasBeenActioned = this.hasReaction();
   }
 
   isLastReplyFromAssignee = () => {
