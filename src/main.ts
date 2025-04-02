@@ -6,7 +6,7 @@ const observeUrlChange = (isInitialLoad: boolean) => {
 
   if (isInitialLoad && doesUrlMatchPrFileViewUrl(oldHref)) {
     prHelperExtension();
-    observeCommentsChange();
+    observeChangesToComments();
   }
 
   // callback to be run when href changes
@@ -17,7 +17,7 @@ const observeUrlChange = (isInitialLoad: boolean) => {
     }
 
     if (doesUrlMatchPrFileViewUrl(oldHref)) {
-      observeCommentsChange();
+      observeChangesToComments();
       prHelperExtension();
     }
   });
@@ -29,28 +29,18 @@ const observeUrlChange = (isInitialLoad: boolean) => {
   });
 };
 
-const observeCommentsChange = () => {
+const observeChangesToComments = () => {
   const commentsChangeContainer = document.querySelector('.js-diff-container');
   const observer = new MutationObserver((mutations) => {
     mutations.forEach(mutation => {
       mutation.removedNodes.forEach((node) => {
-        // when emoji reaction removed
-        if (node instanceof HTMLElement && node.querySelector(REACTION_SELECTOR)) {
-          prHelperExtension();
-        }
-        // when comment resolved
-        if (node instanceof HTMLElement && node.querySelector(COMMENTS_SELECTOR)) {
+        if (node instanceof HTMLElement && (elementIsReaction(node) || elementIsComment(node))) {
           prHelperExtension();
         }
       });
 
       mutation.addedNodes.forEach((node) => {
-        // when emoji is added
-        if (node instanceof HTMLElement && node.querySelector(REACTION_SELECTOR)) {
-          prHelperExtension();
-        }
-        // when comment added
-        if (node instanceof HTMLElement && node.querySelector(COMMENTS_SELECTOR)) {
+        if (node instanceof HTMLElement && (elementIsReaction(node) || elementIsComment(node))) {
           prHelperExtension();
         }
       });
@@ -58,6 +48,10 @@ const observeCommentsChange = () => {
   });
   observer.observe(commentsChangeContainer!!, { childList: true, subtree: true });
 };
+
+const elementIsReaction = (node: HTMLElement) => node.querySelector(REACTION_SELECTOR);
+
+const elementIsComment = (node: HTMLElement) => node.querySelector(COMMENTS_SELECTOR);
 
 const doesUrlMatchPrFileViewUrl = (url: string) => PR_FILES_URL_REGEX.test(url);
 

@@ -1,20 +1,25 @@
-import { PR_HEADER_CONTAINER_SELECTOR } from '../constants';
+import { ACTIONED_COMMENTS_CLASS, PR_HEADER_CONTAINER_SELECTOR } from '../constants';
 
 export const renderCommentInfo = (
   numberActionedComments: number,
   totalNumberOfComments: number
 ) => {
-  const commentsActionedItem = document.querySelector('.comments-actioned');
+  const currentActionedCommentsElement = document.querySelector('.comments-actioned') ?? null;
 
-  if (commentsActionedItem) {
-    commentsActionedItem.textContent = `${numberActionedComments}/${totalNumberOfComments} have been actioned`;
-    return;
+  if (!currentActionedCommentsElement) {
+    renderInitialActionedComments(numberActionedComments, totalNumberOfComments);
+  } else {
+    currentActionedCommentsElement.textContent = `${numberActionedComments}/${totalNumberOfComments} have been actioned`;
   }
+};
 
-  const container = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
-  const firstRenderCommentsActionedItem = document.createElement('div');
-  firstRenderCommentsActionedItem.classList.add('comments-actioned');
-  firstRenderCommentsActionedItem.textContent = `${numberActionedComments}/${totalNumberOfComments} have been actioned`;
-  container?.appendChild(firstRenderCommentsActionedItem);
-
+const renderInitialActionedComments = (
+  numberActionedComments: number,
+  totalNumberOfComments: number
+) => {
+  const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
+  const actionedCommentsElement = document.createElement('div');
+  actionedCommentsElement.classList.add(ACTIONED_COMMENTS_CLASS);
+  actionedCommentsElement.textContent = `${numberActionedComments}/${totalNumberOfComments} have been actioned`;
+  headerContainer?.appendChild(actionedCommentsElement);
 };
