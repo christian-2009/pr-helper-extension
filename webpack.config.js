@@ -16,22 +16,22 @@ module.exports = {
   entry: entryPoints,
   output: {
     path: path.join(__dirname, outputPath),
-    filename: '[name].js',
+    filename: '[name].js'
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js']
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: /node_modules/
       },
       {
         test: /\.(sa|sc)ss$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          'style-loader',
           'css-loader',
           'sass-loader'
         ]
@@ -40,15 +40,15 @@ module.exports = {
         test: /\.(jpg|jpeg|png|gif|woff|woff2|eot|ttf|svg)$/i,
         use: 'url-loader?limit=1024'
       }
-    ],
+    ]
   },
   plugins: [
     new CopyPlugin({
       patterns: [{ from: '.', to: '.', context: 'public' }]
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
+      filename: '[name].css'
     }),
-    new Dotenv(),
+    new Dotenv()
   ]
 };
