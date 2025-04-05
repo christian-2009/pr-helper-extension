@@ -9,7 +9,7 @@ export const renderCommentInfo = (
   if (!currentActionedCommentsElement) {
     renderInitialActionedComments(numberOfActionedComments, totalNumberOfComments);
   } else {
-    currentActionedCommentsElement.textContent = `${numberOfActionedComments}/${totalNumberOfComments} have been actioned`;
+    currentActionedCommentsElement.textContent = `${numberOfActionedComments}/${totalNumberOfComments} comments have been actioned`;
   }
 };
 
@@ -20,6 +20,6 @@ const renderInitialActionedComments = (
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
   const actionedCommentsElement = document.createElement('div');
   actionedCommentsElement.classList.add(ACTIONED_COMMENTS_CLASS);
-  actionedCommentsElement.textContent = `${numberOfActionedComments}/${totalNumberOfComments} have been actioned`;
+  actionedCommentsElement.textContent = `${numberOfActionedComments}/${totalNumberOfComments} comments have been actioned`;
   headerContainer?.appendChild(actionedCommentsElement);
 };
