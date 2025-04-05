@@ -5,21 +5,21 @@ export const renderCommentInfo = (
   totalNumberOfComments: number
 ) => {
   const currentActionedCommentsElement = document.querySelector('.comments-actioned') ?? null;
+  const actionedCommentsText = `${numberOfActionedComments}/${totalNumberOfComments} comments have been actioned`;
 
   if (!currentActionedCommentsElement) {
-    renderInitialActionedComments(numberOfActionedComments, totalNumberOfComments);
+    renderInitialActionedComments(actionedCommentsText);
   } else {
-    currentActionedCommentsElement.textContent = `${numberOfActionedComments}/${totalNumberOfComments} comments have been actioned`;
+    currentActionedCommentsElement.textContent = actionedCommentsText;
   }
 };
 
 const renderInitialActionedComments = (
-  numberOfActionedComments: number,
-  totalNumberOfComments: number
+  actionedCommentsText: string
 ) => {
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
   const actionedCommentsElement = document.createElement('div');
   actionedCommentsElement.classList.add(ACTIONED_COMMENTS_CLASS);
-  actionedCommentsElement.textContent = `${numberOfActionedComments}/${totalNumberOfComments} comments have been actioned`;
+  actionedCommentsElement.textContent = actionedCommentsText;
   headerContainer?.appendChild(actionedCommentsElement);
 };
