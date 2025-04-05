@@ -1,4 +1,4 @@
-import { ACTIONED_COMMENTS_CLASS, PR_HEADER_CONTAINER_SELECTOR } from '../constants';
+import { ACTIONED_COMMENTS_CLASS, ACTIONED_COMMENTS_PARENT_CLASS, PR_HEADER_CONTAINER_SELECTOR } from '../constants';
 
 export const renderCommentInfo = (
   numberOfActionedComments: number,
@@ -18,8 +18,14 @@ const renderInitialActionedComments = (
   actionedCommentsText: string
 ) => {
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
-  const actionedCommentsElement = document.createElement('div');
-  actionedCommentsElement.classList.add(ACTIONED_COMMENTS_CLASS);
-  actionedCommentsElement.textContent = actionedCommentsText;
-  headerContainer?.appendChild(actionedCommentsElement);
+
+  const actionedCommentsContainer = document.createElement('div');
+  actionedCommentsContainer.classList.add(ACTIONED_COMMENTS_PARENT_CLASS);
+
+  const actionedCommentsTextElement = document.createElement('div');
+  actionedCommentsTextElement.classList.add(ACTIONED_COMMENTS_CLASS);
+  actionedCommentsTextElement.textContent = actionedCommentsText;
+
+  actionedCommentsContainer?.appendChild(actionedCommentsTextElement);
+  headerContainer?.appendChild(actionedCommentsContainer);
 };
