@@ -10,10 +10,15 @@ export function prHelperExtension() {
     resolvedComments
   } = dataExtractor();
 
+  if (!numberOfComments) {
+    return;
+  }
+
   const unresolvedCommentData = [...unresolvedComments].map((commentElement) => {
     return new CommentData(commentElement, assignee);
   });
   const actionedComments = unresolvedCommentData.filter((comment) => comment.hasBeenActioned);
   const numberOfActionedComments = resolvedComments.length + actionedComments.length;
+
   renderCommentInfo(numberOfActionedComments, numberOfComments);
 }
