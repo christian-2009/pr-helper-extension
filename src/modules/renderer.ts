@@ -25,6 +25,7 @@ const renderInitialActionedComments = (
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
 
   const actionedCommentsContainer = document.createElement('div');
+  //need to add id to use getElementById if removing actioned comments from screen
   actionedCommentsContainer.id = ACTIONED_COMMENTS_PARENT_CLASS;
   actionedCommentsContainer.classList.add(ACTIONED_COMMENTS_PARENT_CLASS);
 
