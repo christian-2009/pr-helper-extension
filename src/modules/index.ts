@@ -15,5 +15,6 @@ export function prHelperExtension() {
   });
   const actionedComments = unresolvedCommentData.filter((comment) => comment.hasBeenActioned);
   const numberOfActionedComments = resolvedComments.length + actionedComments.length;
+
   renderCommentInfo(numberOfActionedComments, numberOfComments);
 }

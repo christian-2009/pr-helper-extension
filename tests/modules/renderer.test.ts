@@ -1,6 +1,6 @@
 import { renderCommentInfo } from '../../src/modules/renderer';
 import { screen } from '@testing-library/dom';
-import { ACTIONED_COMMENTS_CLASS } from '../../src/constants';
+import { ACTIONED_COMMENTS_CLASS, ACTIONED_COMMENTS_PARENT_CLASS } from '../../src/constants';
 
 describe('renderer', () => {
   beforeEach(() => {
@@ -31,9 +31,7 @@ describe('renderer', () => {
     newTotalComments
   ) => {
     // Given
-    const actionedCommentElement = document.createElement('div');
-    actionedCommentElement.classList.add(ACTIONED_COMMENTS_CLASS);
-    actionedCommentElement.textContent = '8/20 comments have been actioned';
+    renderInitialComment('8/20 comments have been actioned');
 
     // When
     renderCommentInfo(newActionedComments, newTotalComments);
@@ -42,4 +40,28 @@ describe('renderer', () => {
     expect(screen.getByText(`${newActionedComments}/${newTotalComments} comments have been actioned`)).toBeInTheDocument();
     expect(screen.queryByText('8/20 comments have been actioned')).not.toBeInTheDocument();
   });
+
+  it('should remove actioned comments if there are no comments on pr currently', () => {
+    // Given
+    renderInitialComment('1/20 comments have been actioned');
+
+    // When
+    renderCommentInfo(0, 0);
+
+    // Then
+    expect(screen.queryByText(/comments have been actioned/i)).not.toBeInTheDocument();
+  });
 });
+
+const renderInitialComment = (text: string) => {
+  const actionedCommentElement = document.createElement('div');
+  actionedCommentElement.classList.add(ACTIONED_COMMENTS_CLASS);
+  actionedCommentElement.textContent = text;
+
+  const actionedCommentsContainer = document.createElement('div');
+  actionedCommentsContainer.id = ACTIONED_COMMENTS_PARENT_CLASS;
+  actionedCommentsContainer.classList.add(ACTIONED_COMMENTS_PARENT_CLASS);
+  actionedCommentsContainer.appendChild(actionedCommentElement);
+
+  document.body.appendChild(actionedCommentsContainer);
+};
