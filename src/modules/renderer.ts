@@ -4,6 +4,11 @@ export const renderCommentInfo = (
   numberOfActionedComments: number,
   totalNumberOfComments: number
 ) => {
+  if (!totalNumberOfComments) {
+    removeActionedCommentsFromScreen();
+    return;
+  }
+
   const currentActionedCommentsElement = document.querySelector('.comments-actioned') ?? null;
   const actionedCommentsText = `${numberOfActionedComments}/${totalNumberOfComments} comments have been actioned`;
 
@@ -20,6 +25,7 @@ const renderInitialActionedComments = (
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
 
   const actionedCommentsContainer = document.createElement('div');
+  actionedCommentsContainer.id = ACTIONED_COMMENTS_PARENT_CLASS;
   actionedCommentsContainer.classList.add(ACTIONED_COMMENTS_PARENT_CLASS);
 
   const actionedCommentsTextElement = document.createElement('div');
@@ -28,4 +34,8 @@ const renderInitialActionedComments = (
 
   actionedCommentsContainer?.appendChild(actionedCommentsTextElement);
   headerContainer?.appendChild(actionedCommentsContainer);
+};
+
+const removeActionedCommentsFromScreen = () => {
+  document.getElementById(ACTIONED_COMMENTS_PARENT_CLASS)?.remove();
 };

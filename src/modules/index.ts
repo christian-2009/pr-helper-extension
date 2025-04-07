@@ -10,10 +10,6 @@ export function prHelperExtension() {
     resolvedComments
   } = dataExtractor();
 
-  if (!numberOfComments) {
-    return;
-  }
-
   const unresolvedCommentData = [...unresolvedComments].map((commentElement) => {
     return new CommentData(commentElement, assignee);
   });
