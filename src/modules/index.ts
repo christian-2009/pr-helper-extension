@@ -1,6 +1,6 @@
 import { dataExtractor } from './dataExtractor';
 import { CommentData } from '../CommentData';
-import { renderCommentInfo } from './renderer';
+import { renderCommentInfo } from './renderer/renderer';
 
 export function prHelperExtension() {
   const {
@@ -16,5 +16,5 @@ export function prHelperExtension() {
   const actionedComments = unresolvedCommentData.filter((comment) => comment.hasBeenActioned);
   const numberOfActionedComments = resolvedComments.length + actionedComments.length;
 
-  renderCommentInfo(numberOfActionedComments, numberOfComments);
+  renderCommentInfo(numberOfActionedComments, numberOfComments, unresolvedCommentData);
 }

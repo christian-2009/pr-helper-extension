@@ -4,4 +4,5 @@ export const COMMENTS_SELECTOR = '.js-inline-comments-container';
 export const ASSIGNEE_SELECTOR = '.author';
 export const PR_HEADER_CONTAINER_SELECTOR = '.gh-header-show';
 export const ACTIONED_COMMENTS_CLASS = 'comments-actioned';
-export const ACTIONED_COMMENTS_PARENT_CLASS = 'comments-actioned-container';
+export const ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS = 'comments-actioned-outer-container';
+export const ACTIONED_COMMENTS_INNER_CONTAINER_CLASS = 'comments-actioned-inner-container';

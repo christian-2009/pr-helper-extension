@@ -1,14 +1,26 @@
-.comments-actioned-container {
-  width: 100%;
+.comments-actioned-outer-container {
+  //width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.comments-actioned-inner-container {
+  margin-bottom: 0.6rem;
+  background-color: #4169E1;
+  color: white;
+  padding: 0.1em 0.6em;
+  border-radius: 0.5em;
+  width: auto;
 }
 
 .comments-actioned {
   font-size: 1.2rem;
-  margin-bottom: 0.6rem;
   font-weight: 400;
-  background-color: #4169E1;
-  color: white;
-  padding: 0.1em 0.6em;
-  border-radius: 2em;
+}
+
+.comment-details {
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
 }
