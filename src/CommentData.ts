@@ -25,10 +25,9 @@ export class CommentData {
   hasReaction = () => !!this.commentElement.querySelector(REACTION_SELECTOR)?.textContent;
 
   getCommentDescription = (): string =>
-    this.commentElement.querySelectorAll('.js-comment-body')[0].textContent?.trim() ?? '';
+    this.commentElement.querySelectorAll('.js-comment-body')[0]?.textContent?.trim() ?? '';
 
   getFileName = (): string => {
-    console.log(this.commentElement);
     const fileElementsInPr = document.querySelectorAll('.js-file.js-details-container');
     let fileElementCommentIsIn;
 
