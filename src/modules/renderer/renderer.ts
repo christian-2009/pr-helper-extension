@@ -23,6 +23,16 @@ export const renderCommentInfo = (
     renderInitialActionedComments(actionedCommentsText, comments);
   } else {
     currentActionedCommentsElement.textContent = actionedCommentsText;
+    const commentDetailsContainer = document.querySelector('.comment-details');
+    if (commentDetailsContainer) {
+      commentDetailsContainer.innerHTML = '';
+    }
+    for (const comment of comments) {
+      const commentDetail = document.createElement('div');
+      commentDetail.textContent = comment.commentDescription;
+      commentDetailsContainer?.appendChild(commentDetail);
+    }
+
   }
 };
 
@@ -31,10 +41,6 @@ const renderInitialActionedComments = (
   comments: CommentData[]
 ) => {
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
-
-  //render outer container (flexbox)
-  //render inner container (contains colour etc)
-  //inside put the actioned comments text and then each comment description (needs to be in a separate child)
 
   const actionedCommentsOuterContainer = document.createElement('div');
   //need to add id to use getElementById if removing actioned comments from screen
