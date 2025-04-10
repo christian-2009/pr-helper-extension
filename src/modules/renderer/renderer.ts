@@ -7,7 +7,7 @@ import {
 import { CommentData } from '../../CommentData';
 
 export const renderCommentInfo = (
-  numberOfActionedComments: number,
+  numberOfUnactionedComments: number,
   totalNumberOfComments: number,
   comments: CommentData[]
 ) => {
@@ -17,12 +17,12 @@ export const renderCommentInfo = (
   }
 
   const currentActionedCommentsElement = document.querySelector('.comments-actioned') ?? null;
-  const actionedCommentsText = `${numberOfActionedComments}/${totalNumberOfComments} comments have been actioned`;
+  const unactionedCommentsText = `${numberOfUnactionedComments}/${totalNumberOfComments} comments need actioning`;
 
   if (!currentActionedCommentsElement) {
-    renderInitialActionedComments(actionedCommentsText, comments);
+    renderInitialActionedComments(unactionedCommentsText, comments);
   } else {
-    currentActionedCommentsElement.textContent = actionedCommentsText;
+    currentActionedCommentsElement.textContent = unactionedCommentsText;
     const commentDetailsContainer = document.querySelector('.comment-details');
     if (commentDetailsContainer) {
       commentDetailsContainer.innerHTML = '';
@@ -56,6 +56,7 @@ const renderInitialActionedComments = (
 
   const commentDetailsContainer = document.createElement('div');
   commentDetailsContainer.classList.add('comment-details');
+  commentDetailsContainer.textContent = 'Comments that need actioning';
   actionedCommentsInnerContainer.addEventListener('click', () => {
     if (commentDetailsContainer.style.display === 'none') {
       commentDetailsContainer.style.display = 'flex';
@@ -78,19 +79,4 @@ const renderInitialActionedComments = (
 
 const removeActionedCommentsFromScreen = () => {
   document.getElementById(ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS)?.remove();
-};
-
-const testForRender = () => {
-  console.log('in here');
-  const actionedCommentsContainer = document.getElementById(ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS);
-  const subItem = document.createElement('div');
-  subItem.classList.add('panel-test');
-  const text = document.createElement('p');
-  text.textContent = 'hello there';
-  subItem.appendChild(text);
-  actionedCommentsContainer?.addEventListener('click', () => {
-    subItem.style.display = 'flex';
-  });
-
-  actionedCommentsContainer?.appendChild(subItem);
 };

@@ -13,7 +13,7 @@ describe('renderer', () => {
     document.body.appendChild(headerElementMock);
   });
 
-  it('renders actioned comments correctly initially', () => {
+  it('renders comments that need actioning correctly initially', () => {
     // Given
     const mockComments = Array.of<CommentData>();
 
@@ -21,7 +21,7 @@ describe('renderer', () => {
     renderCommentInfo(8, 20, mockComments);
 
     // Then
-    expect(screen.getByText('8/20 comments have been actioned')).toBeInTheDocument();
+    expect(screen.getByText('8/20 comments need actioning')).toBeInTheDocument();
   });
 
   it.each([
@@ -29,32 +29,32 @@ describe('renderer', () => {
     [8, 21],
     [8, 19],
     [9, 19]
-  ])('renders updated actioned comments correctly if there is one already in the DOM', (
+  ])('renders updated unactioned comments correctly if there is one already in the DOM', (
     newActionedComments,
     newTotalComments
   ) => {
     // Given
     const mockComments = Array.of<CommentData>();
-    renderInitialComment('8/20 comments have been actioned');
+    renderInitialComment('8/20 comments need actioning');
 
     // When
     renderCommentInfo(newActionedComments, newTotalComments, mockComments);
 
     // Then
-    expect(screen.getByText(`${newActionedComments}/${newTotalComments} comments have been actioned`)).toBeInTheDocument();
-    expect(screen.queryByText('8/20 comments have been actioned')).not.toBeInTheDocument();
+    expect(screen.getByText(`${newActionedComments}/${newTotalComments} comments need actioning`)).toBeInTheDocument();
+    expect(screen.queryByText('8/20 comments need actioning')).not.toBeInTheDocument();
   });
 
-  it('should remove actioned comments if there are no comments on pr currently', () => {
+  it('should remove unactioned comments section if there are no comments on pr currently', () => {
     // Given
     const mockComments = Array.of<CommentData>();
-    renderInitialComment('1/20 comments have been actioned');
+    renderInitialComment('1/20 comments need actioning');
 
     // When
     renderCommentInfo(0, 0, mockComments);
 
     // Then
-    expect(screen.queryByText(/comments have been actioned/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/comments need actioning/i)).not.toBeInTheDocument();
   });
 });
 
