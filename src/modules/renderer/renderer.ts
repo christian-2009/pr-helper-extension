@@ -1,8 +1,8 @@
 import {
-  ACTIONED_COMMENTS_CLASS,
-  ACTIONED_COMMENTS_INNER_CONTAINER_CLASS,
-  ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS,
-  PR_HEADER_CONTAINER_SELECTOR
+  INNER_CONTAINER_CLASS,
+  OUTER_CONTAINER_CLASS,
+  PR_HEADER_CONTAINER_SELECTOR,
+  UNACTIONED_COMMENTS_HEADER_CLASS
 } from '../../constants';
 import { CommentData } from '../../CommentData';
 
@@ -12,17 +12,17 @@ export const renderCommentInfo = (
   comments: CommentData[]
 ) => {
   if (!totalNumberOfComments) {
-    removeActionedCommentsFromScreen();
+    removeUnactionedCommentsElementFromScreen();
     return;
   }
 
-  const currentActionedCommentsElement = document.querySelector('.comments-actioned') ?? null;
+  const currentUnactionedCommentsElement = document.querySelector('.comments-actioned') ?? null;
   const unactionedCommentsText = `${numberOfUnactionedComments}/${totalNumberOfComments} comments need actioning`;
 
-  if (!currentActionedCommentsElement) {
-    renderInitialActionedComments(unactionedCommentsText, comments);
+  if (!currentUnactionedCommentsElement) {
+    renderInitialUnactionedCommentsView(unactionedCommentsText, comments);
   } else {
-    currentActionedCommentsElement.textContent = unactionedCommentsText;
+    currentUnactionedCommentsElement.textContent = unactionedCommentsText;
     const commentDetailsContainer = document.querySelector('.comment-details');
     if (commentDetailsContainer) {
       commentDetailsContainer.innerHTML = '';
@@ -36,28 +36,27 @@ export const renderCommentInfo = (
   }
 };
 
-const renderInitialActionedComments = (
-  actionedCommentsText: string,
+const renderInitialUnactionedCommentsView = (
+  unactionedCommentsText: string,
   comments: CommentData[]
 ) => {
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
 
-  const actionedCommentsOuterContainer = document.createElement('div');
+  const outerContainer = document.createElement('div');
   //need to add id to use getElementById if removing actioned comments from screen
-  actionedCommentsOuterContainer.id = ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS;
-  actionedCommentsOuterContainer.classList.add(ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS);
+  outerContainer.id = OUTER_CONTAINER_CLASS;
+  outerContainer.classList.add(OUTER_CONTAINER_CLASS);
 
-  const actionedCommentsInnerContainer = document.createElement('div');
-  actionedCommentsInnerContainer.classList.add(ACTIONED_COMMENTS_INNER_CONTAINER_CLASS);
+  const innerContainer = document.createElement('div');
+  innerContainer.classList.add(INNER_CONTAINER_CLASS);
 
-  const actionedCommentsTextElement = document.createElement('div');
-  actionedCommentsTextElement.classList.add(ACTIONED_COMMENTS_CLASS);
-  actionedCommentsTextElement.textContent = actionedCommentsText;
+  const unactionedCommentsHeader = document.createElement('div');
+  unactionedCommentsHeader.classList.add(UNACTIONED_COMMENTS_HEADER_CLASS);
+  unactionedCommentsHeader.textContent = unactionedCommentsText;
 
   const commentDetailsContainer = document.createElement('div');
   commentDetailsContainer.classList.add('comment-details');
-  commentDetailsContainer.textContent = 'Comments that need actioning';
-  actionedCommentsInnerContainer.addEventListener('click', () => {
+  innerContainer.addEventListener('click', () => {
     if (commentDetailsContainer.style.display === 'none') {
       commentDetailsContainer.style.display = 'flex';
     } else {
@@ -71,12 +70,12 @@ const renderInitialActionedComments = (
     commentDetailsContainer.appendChild(commentDetail);
   }
 
-  actionedCommentsInnerContainer?.appendChild(actionedCommentsTextElement);
-  actionedCommentsInnerContainer.appendChild(commentDetailsContainer);
-  actionedCommentsOuterContainer?.appendChild(actionedCommentsInnerContainer);
-  headerContainer?.appendChild(actionedCommentsOuterContainer);
+  innerContainer?.appendChild(unactionedCommentsHeader);
+  innerContainer.appendChild(commentDetailsContainer);
+  outerContainer?.appendChild(innerContainer);
+  headerContainer?.appendChild(outerContainer);
 };
 
-const removeActionedCommentsFromScreen = () => {
-  document.getElementById(ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS)?.remove();
+const removeUnactionedCommentsElementFromScreen = () => {
+  document.getElementById(OUTER_CONTAINER_CLASS)?.remove();
 };

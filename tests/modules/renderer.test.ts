@@ -1,6 +1,6 @@
 import { renderCommentInfo } from '../../src/modules/renderer/renderer';
 import { screen } from '@testing-library/dom';
-import { ACTIONED_COMMENTS_CLASS, ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS } from '../../src/constants';
+import { OUTER_CONTAINER_CLASS, UNACTIONED_COMMENTS_HEADER_CLASS } from '../../src/constants';
 import { CommentData } from '../../src/CommentData';
 
 describe('renderer', () => {
@@ -56,17 +56,52 @@ describe('renderer', () => {
     // Then
     expect(screen.queryByText(/comments need actioning/i)).not.toBeInTheDocument();
   });
+
+  it('should render comment details correctly', () => {
+    // Given
+    const mockCommentData = Array.of(buildCommentData());
+
+    // When
+    renderCommentInfo(1, 5, mockCommentData);
+
+    // Then
+    expect(screen.getByText('first comment that should show')).toBeInTheDocument();
+    expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
+  });
+
+  //Write test to check that new comment details are added too
 });
 
 const renderInitialComment = (text: string) => {
   const actionedCommentElement = document.createElement('div');
-  actionedCommentElement.classList.add(ACTIONED_COMMENTS_CLASS);
+  actionedCommentElement.classList.add(UNACTIONED_COMMENTS_HEADER_CLASS);
   actionedCommentElement.textContent = text;
 
   const actionedCommentsContainer = document.createElement('div');
-  actionedCommentsContainer.id = ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS;
-  actionedCommentsContainer.classList.add(ACTIONED_COMMENTS_OUTER_CONTAINER_CLASS);
+  actionedCommentsContainer.id = OUTER_CONTAINER_CLASS;
+  actionedCommentsContainer.classList.add(OUTER_CONTAINER_CLASS);
   actionedCommentsContainer.appendChild(actionedCommentElement);
 
   document.body.appendChild(actionedCommentsContainer);
+};
+
+const buildCommentData = () => {
+  const mockHtml =
+    `
+    <div>
+      <div class="js-file js-details-container">
+        <div class="Link--primary Truncate-text">Title 1</div>
+        <div>
+          <div class="js-comment-body">first comment that should show</div>
+          <div class="js-comment-body">reply comment we don't care about</div>
+        </div>
+      </div>
+      <div class="js-file js-details-container">
+        <div class="Link--primary Truncate-text">Title 2</div>
+      </div>
+    </div>
+    `;
+  const mockCommentElement = document.createElement('div');
+  mockCommentElement.innerHTML = mockHtml;
+  return new CommentData(mockCommentElement, 'actual assignee');
 };
