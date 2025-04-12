@@ -1,6 +1,10 @@
 import { renderCommentInfo } from '../../src/modules/renderer/renderer';
 import { screen } from '@testing-library/dom';
-import { OUTER_CONTAINER_CLASS, UNACTIONED_COMMENTS_HEADER_CLASS } from '../../src/constants';
+import {
+  COMMENT_DETAILS_CONTAINER_CLASS,
+  OUTER_CONTAINER_CLASS,
+  UNACTIONED_COMMENTS_HEADER_CLASS
+} from '../../src/constants';
 import { CommentData } from '../../src/CommentData';
 
 describe('renderer', () => {
@@ -57,22 +61,42 @@ describe('renderer', () => {
     expect(screen.queryByText(/comments need actioning/i)).not.toBeInTheDocument();
   });
 
-  it('should render comment details correctly', () => {
-    // Given
-    const mockCommentData = Array.of(buildCommentData());
+  describe('comment details', () => {
+    // for these tests we don't care about the numberOfUnactionedComments and totalNumberOfComments passed to renderCommentInfo
+    it('should render comment details correctly', () => {
+      // Given
+      const mockComment = 'first comment that should show';
+      const mockCommentData = Array.of(buildCommentData(mockComment));
 
-    // When
-    renderCommentInfo(1, 5, mockCommentData);
+      // When
+      renderCommentInfo(1, 5, mockCommentData);
 
-    // Then
-    expect(screen.getByText('first comment that should show')).toBeInTheDocument();
-    expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
+      // Then
+      expect(screen.getByText(mockComment)).toBeInTheDocument();
+      expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
+    });
+
+    it('should render comment details when new one added', () => {
+      // Given
+      renderInitialComment();
+      const firstCommentDetail = 'first comment';
+      const firstCommentData = buildCommentData(firstCommentDetail);
+      document.body.appendChild(buildCommentDetails(firstCommentDetail));
+
+      const nextCommentData = buildCommentData('next comment');
+
+      // When
+      renderCommentInfo(1, 5, [firstCommentData, nextCommentData]);
+
+      // Then
+      expect(screen.getByText(firstCommentDetail)).toBeInTheDocument();
+      expect(screen.getByText('next comment')).toBeInTheDocument();
+    });
   });
 
-  //Write test to check that new comment details are added too
 });
 
-const renderInitialComment = (text: string) => {
+const renderInitialComment = (text: string = '8/20 comments need actioning') => {
   const actionedCommentElement = document.createElement('div');
   actionedCommentElement.classList.add(UNACTIONED_COMMENTS_HEADER_CLASS);
   actionedCommentElement.textContent = text;
@@ -85,14 +109,14 @@ const renderInitialComment = (text: string) => {
   document.body.appendChild(actionedCommentsContainer);
 };
 
-const buildCommentData = () => {
+const buildCommentData = (initialCommentText: string) => {
   const mockHtml =
     `
     <div>
       <div class="js-file js-details-container">
         <div class="Link--primary Truncate-text">Title 1</div>
         <div>
-          <div class="js-comment-body">first comment that should show</div>
+          <div class="js-comment-body">${initialCommentText}</div>
           <div class="js-comment-body">reply comment we don't care about</div>
         </div>
       </div>
@@ -105,3 +129,15 @@ const buildCommentData = () => {
   mockCommentElement.innerHTML = mockHtml;
   return new CommentData(mockCommentElement, 'actual assignee');
 };
+
+const buildCommentDetails = (commentDetailText: string) => {
+  const mockHtml =
+    `
+    <div>${commentDetailText}</div>
+    `;
+  const mockHtmlElement = document.createElement('div');
+  mockHtmlElement.classList.add(COMMENT_DETAILS_CONTAINER_CLASS);
+  mockHtmlElement.innerHTML = mockHtml;
+  return mockHtmlElement;
+};
+

@@ -1,7 +1,9 @@
 import {
+  COMMENT_DETAILS_CONTAINER_SELECTOR,
   INNER_CONTAINER_CLASS,
   OUTER_CONTAINER_CLASS,
   PR_HEADER_CONTAINER_SELECTOR,
+  UNACTIONED_COMMENTS_ELEMENT_SELECTOR,
   UNACTIONED_COMMENTS_HEADER_CLASS
 } from '../../constants';
 import { CommentData } from '../../CommentData';
@@ -16,14 +18,14 @@ export const renderCommentInfo = (
     return;
   }
 
-  const currentUnactionedCommentsElement = document.querySelector('.comments-actioned') ?? null;
+  const currentUnactionedCommentsElement = document.querySelector(UNACTIONED_COMMENTS_ELEMENT_SELECTOR) ?? null;
   const unactionedCommentsText = `${numberOfUnactionedComments}/${totalNumberOfComments} comments need actioning`;
 
   if (!currentUnactionedCommentsElement) {
     renderInitialUnactionedCommentsView(unactionedCommentsText, comments);
   } else {
     currentUnactionedCommentsElement.textContent = unactionedCommentsText;
-    const commentDetailsContainer = document.querySelector('.comment-details');
+    const commentDetailsContainer = document.querySelector(COMMENT_DETAILS_CONTAINER_SELECTOR);
     if (commentDetailsContainer) {
       commentDetailsContainer.innerHTML = '';
     }
