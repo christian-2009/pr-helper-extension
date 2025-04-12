@@ -1,30 +1,30 @@
 import {
   COMMENT_DETAILS_CONTAINER_SELECTOR,
+  COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
+  COMMENTS_LEFT_TO_ACTION_HEADER_SELECTOR,
   INNER_CONTAINER_CLASS,
   OUTER_CONTAINER_CLASS,
-  PR_HEADER_CONTAINER_SELECTOR,
-  UNACTIONED_COMMENTS_ELEMENT_SELECTOR,
-  UNACTIONED_COMMENTS_HEADER_CLASS
+  PR_HEADER_CONTAINER_SELECTOR
 } from '../../constants';
 import { CommentData } from '../../CommentData';
 
 export const renderCommentInfo = (
-  numberOfUnactionedComments: number,
+  numberOfCommentsLeftToAction: number,
   totalNumberOfComments: number,
   comments: CommentData[]
 ) => {
   if (!totalNumberOfComments) {
-    removeUnactionedCommentsElementFromScreen();
+    removeCommentsLeftToActionElementFromScreen();
     return;
   }
 
-  const currentUnactionedCommentsElement = document.querySelector(UNACTIONED_COMMENTS_ELEMENT_SELECTOR) ?? null;
-  const unactionedCommentsText = `${numberOfUnactionedComments}/${totalNumberOfComments} comments need actioning`;
+  const currentCommentsLeftToActionElement = document.querySelector(COMMENTS_LEFT_TO_ACTION_HEADER_SELECTOR) ?? null;
+  const commentsLeftToActionText = `${numberOfCommentsLeftToAction} ${numberOfCommentsLeftToAction === 1 ? 'comment' : 'comments'} left to action (${totalNumberOfComments} total)`;
 
-  if (!currentUnactionedCommentsElement) {
-    renderInitialUnactionedCommentsView(unactionedCommentsText, comments);
+  if (!currentCommentsLeftToActionElement) {
+    renderInitialCommentsLeftToActionView(commentsLeftToActionText, comments);
   } else {
-    currentUnactionedCommentsElement.textContent = unactionedCommentsText;
+    currentCommentsLeftToActionElement.textContent = commentsLeftToActionText;
     const commentDetailsContainer = document.querySelector(COMMENT_DETAILS_CONTAINER_SELECTOR);
     if (commentDetailsContainer) {
       commentDetailsContainer.innerHTML = '';
@@ -38,8 +38,8 @@ export const renderCommentInfo = (
   }
 };
 
-const renderInitialUnactionedCommentsView = (
-  unactionedCommentsText: string,
+const renderInitialCommentsLeftToActionView = (
+  commentsLeftToActionText: string,
   comments: CommentData[]
 ) => {
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
@@ -52,9 +52,9 @@ const renderInitialUnactionedCommentsView = (
   const innerContainer = document.createElement('div');
   innerContainer.classList.add(INNER_CONTAINER_CLASS);
 
-  const unactionedCommentsHeader = document.createElement('div');
-  unactionedCommentsHeader.classList.add(UNACTIONED_COMMENTS_HEADER_CLASS);
-  unactionedCommentsHeader.textContent = unactionedCommentsText;
+  const commentsLeftToActionElementContainer = document.createElement('div');
+  commentsLeftToActionElementContainer.classList.add(COMMENTS_LEFT_TO_ACTION_HEADER_CLASS);
+  commentsLeftToActionElementContainer.textContent = commentsLeftToActionText;
 
   const commentDetailsContainer = document.createElement('div');
   commentDetailsContainer.classList.add('comment-details');
@@ -72,12 +72,12 @@ const renderInitialUnactionedCommentsView = (
     commentDetailsContainer.appendChild(commentDetail);
   }
 
-  innerContainer?.appendChild(unactionedCommentsHeader);
+  innerContainer?.appendChild(commentsLeftToActionElementContainer);
   innerContainer.appendChild(commentDetailsContainer);
   outerContainer?.appendChild(innerContainer);
   headerContainer?.appendChild(outerContainer);
 };
 
-const removeUnactionedCommentsElementFromScreen = () => {
+const removeCommentsLeftToActionElementFromScreen = () => {
   document.getElementById(OUTER_CONTAINER_CLASS)?.remove();
 };

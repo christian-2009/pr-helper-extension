@@ -2,8 +2,8 @@ import { renderCommentInfo } from '../../src/modules/renderer/renderer';
 import { screen } from '@testing-library/dom';
 import {
   COMMENT_DETAILS_CONTAINER_CLASS,
-  OUTER_CONTAINER_CLASS,
-  UNACTIONED_COMMENTS_HEADER_CLASS
+  COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
+  OUTER_CONTAINER_CLASS
 } from '../../src/constants';
 import { CommentData } from '../../src/CommentData';
 
@@ -25,7 +25,7 @@ describe('renderer', () => {
     renderCommentInfo(8, 20, mockComments);
 
     // Then
-    expect(screen.getByText('8/20 comments need actioning')).toBeInTheDocument();
+    expect(screen.getByText('8 comments left to action (20 total)')).toBeInTheDocument();
   });
 
   it.each([
@@ -33,36 +33,44 @@ describe('renderer', () => {
     [8, 21],
     [8, 19],
     [9, 19]
-  ])('renders updated unactioned comments correctly if there is one already in the DOM', (
+  ])('renders updated comments left to action comments correctly if there is one already in the DOM', (
     newActionedComments,
     newTotalComments
   ) => {
     // Given
     const mockComments = Array.of<CommentData>();
-    renderInitialComment('8/20 comments need actioning');
+    renderInitialCommentLeftToActionElement('8 comments left to action (20 total)');
 
     // When
     renderCommentInfo(newActionedComments, newTotalComments, mockComments);
 
     // Then
-    expect(screen.getByText(`${newActionedComments}/${newTotalComments} comments need actioning`)).toBeInTheDocument();
-    expect(screen.queryByText('8/20 comments need actioning')).not.toBeInTheDocument();
+    expect(screen.getByText(`${newActionedComments} comments left to action (${newTotalComments} total)`)).toBeInTheDocument();
+    expect(screen.queryByText('8 comments left to action (20 total)')).not.toBeInTheDocument();
   });
 
-  it('should remove unactioned comments section if there are no comments on pr currently', () => {
+  it('should remove comments left to actions comments section if there are no comments on pr currently', () => {
     // Given
     const mockComments = Array.of<CommentData>();
-    renderInitialComment('1/20 comments need actioning');
+    renderInitialCommentLeftToActionElement('2 comments left to action (20 total)');
 
     // When
     renderCommentInfo(0, 0, mockComments);
 
     // Then
-    expect(screen.queryByText(/comments need actioning/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/comments left to action/i)).not.toBeInTheDocument();
+  });
+
+  it('should use comment in header if there is only 1 comment', () => {
+    const mockComments = Array.of<CommentData>();
+
+    renderCommentInfo(1, 20, mockComments);
+
+    expect(screen.getByText('1 comment left to action (20 total)')).toBeInTheDocument();
   });
 
   describe('comment details', () => {
-    // for these tests we don't care about the numberOfUnactionedComments and totalNumberOfComments passed to renderCommentInfo
+    // for these tests we don't care about the numberOfCommentsLeftToAction and totalNumberOfComments passed to renderCommentInfo
     it('should render comment details correctly', () => {
       // Given
       const mockComment = 'first comment that should show';
@@ -78,7 +86,7 @@ describe('renderer', () => {
 
     it('should render comment details when new one added', () => {
       // Given
-      renderInitialComment();
+      renderInitialCommentLeftToActionElement();
       const firstCommentDetail = 'first comment';
       const firstCommentData = buildCommentData(firstCommentDetail);
       document.body.appendChild(buildCommentDetails(firstCommentDetail));
@@ -96,17 +104,17 @@ describe('renderer', () => {
 
 });
 
-const renderInitialComment = (text: string = '8/20 comments need actioning') => {
-  const actionedCommentElement = document.createElement('div');
-  actionedCommentElement.classList.add(UNACTIONED_COMMENTS_HEADER_CLASS);
-  actionedCommentElement.textContent = text;
+const renderInitialCommentLeftToActionElement = (text: string = '8 comments left to action (20 total)') => {
+  const commentsLeftToActionElement = document.createElement('div');
+  commentsLeftToActionElement.classList.add(COMMENTS_LEFT_TO_ACTION_HEADER_CLASS);
+  commentsLeftToActionElement.textContent = text;
 
-  const actionedCommentsContainer = document.createElement('div');
-  actionedCommentsContainer.id = OUTER_CONTAINER_CLASS;
-  actionedCommentsContainer.classList.add(OUTER_CONTAINER_CLASS);
-  actionedCommentsContainer.appendChild(actionedCommentElement);
+  const commentsLeftToActionElementContainer = document.createElement('div');
+  commentsLeftToActionElementContainer.id = OUTER_CONTAINER_CLASS;
+  commentsLeftToActionElementContainer.classList.add(OUTER_CONTAINER_CLASS);
+  commentsLeftToActionElementContainer.appendChild(commentsLeftToActionElement);
 
-  document.body.appendChild(actionedCommentsContainer);
+  document.body.appendChild(commentsLeftToActionElementContainer);
 };
 
 const buildCommentData = (initialCommentText: string) => {
