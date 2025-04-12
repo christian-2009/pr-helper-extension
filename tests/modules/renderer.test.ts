@@ -1,6 +1,11 @@
-import { renderCommentInfo } from '../../src/modules/renderer';
+import { renderCommentInfo } from '../../src/modules/renderer/renderer';
 import { screen } from '@testing-library/dom';
-import { ACTIONED_COMMENTS_CLASS, ACTIONED_COMMENTS_PARENT_CLASS } from '../../src/constants';
+import {
+  COMMENT_DETAILS_CONTAINER_CLASS,
+  OUTER_CONTAINER_CLASS,
+  UNACTIONED_COMMENTS_HEADER_CLASS
+} from '../../src/constants';
+import { CommentData } from '../../src/CommentData';
 
 describe('renderer', () => {
   beforeEach(() => {
@@ -12,13 +17,15 @@ describe('renderer', () => {
     document.body.appendChild(headerElementMock);
   });
 
-  it('renders actioned comments correctly initially', () => {
+  it('renders comments that need actioning correctly initially', () => {
     // Given
+    const mockComments = Array.of<CommentData>();
+
     // When
-    renderCommentInfo(8, 20);
+    renderCommentInfo(8, 20, mockComments);
 
     // Then
-    expect(screen.getByText('8/20 comments have been actioned')).toBeInTheDocument();
+    expect(screen.getByText('8/20 comments need actioning')).toBeInTheDocument();
   });
 
   it.each([
@@ -26,42 +33,111 @@ describe('renderer', () => {
     [8, 21],
     [8, 19],
     [9, 19]
-  ])('renders updated actioned comments correctly if there is one already in the DOM', (
+  ])('renders updated unactioned comments correctly if there is one already in the DOM', (
     newActionedComments,
     newTotalComments
   ) => {
     // Given
-    renderInitialComment('8/20 comments have been actioned');
+    const mockComments = Array.of<CommentData>();
+    renderInitialComment('8/20 comments need actioning');
 
     // When
-    renderCommentInfo(newActionedComments, newTotalComments);
+    renderCommentInfo(newActionedComments, newTotalComments, mockComments);
 
     // Then
-    expect(screen.getByText(`${newActionedComments}/${newTotalComments} comments have been actioned`)).toBeInTheDocument();
-    expect(screen.queryByText('8/20 comments have been actioned')).not.toBeInTheDocument();
+    expect(screen.getByText(`${newActionedComments}/${newTotalComments} comments need actioning`)).toBeInTheDocument();
+    expect(screen.queryByText('8/20 comments need actioning')).not.toBeInTheDocument();
   });
 
-  it('should remove actioned comments if there are no comments on pr currently', () => {
+  it('should remove unactioned comments section if there are no comments on pr currently', () => {
     // Given
-    renderInitialComment('1/20 comments have been actioned');
+    const mockComments = Array.of<CommentData>();
+    renderInitialComment('1/20 comments need actioning');
 
     // When
-    renderCommentInfo(0, 0);
+    renderCommentInfo(0, 0, mockComments);
 
     // Then
-    expect(screen.queryByText(/comments have been actioned/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/comments need actioning/i)).not.toBeInTheDocument();
   });
+
+  describe('comment details', () => {
+    // for these tests we don't care about the numberOfUnactionedComments and totalNumberOfComments passed to renderCommentInfo
+    it('should render comment details correctly', () => {
+      // Given
+      const mockComment = 'first comment that should show';
+      const mockCommentData = Array.of(buildCommentData(mockComment));
+
+      // When
+      renderCommentInfo(1, 5, mockCommentData);
+
+      // Then
+      expect(screen.getByText(mockComment)).toBeInTheDocument();
+      expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
+    });
+
+    it('should render comment details when new one added', () => {
+      // Given
+      renderInitialComment();
+      const firstCommentDetail = 'first comment';
+      const firstCommentData = buildCommentData(firstCommentDetail);
+      document.body.appendChild(buildCommentDetails(firstCommentDetail));
+
+      const nextCommentData = buildCommentData('next comment');
+
+      // When
+      renderCommentInfo(1, 5, [firstCommentData, nextCommentData]);
+
+      // Then
+      expect(screen.getByText(firstCommentDetail)).toBeInTheDocument();
+      expect(screen.getByText('next comment')).toBeInTheDocument();
+    });
+  });
+
 });
 
-const renderInitialComment = (text: string) => {
+const renderInitialComment = (text: string = '8/20 comments need actioning') => {
   const actionedCommentElement = document.createElement('div');
-  actionedCommentElement.classList.add(ACTIONED_COMMENTS_CLASS);
+  actionedCommentElement.classList.add(UNACTIONED_COMMENTS_HEADER_CLASS);
   actionedCommentElement.textContent = text;
 
   const actionedCommentsContainer = document.createElement('div');
-  actionedCommentsContainer.id = ACTIONED_COMMENTS_PARENT_CLASS;
-  actionedCommentsContainer.classList.add(ACTIONED_COMMENTS_PARENT_CLASS);
+  actionedCommentsContainer.id = OUTER_CONTAINER_CLASS;
+  actionedCommentsContainer.classList.add(OUTER_CONTAINER_CLASS);
   actionedCommentsContainer.appendChild(actionedCommentElement);
 
   document.body.appendChild(actionedCommentsContainer);
 };
+
+const buildCommentData = (initialCommentText: string) => {
+  const mockHtml =
+    `
+    <div>
+      <div class="js-file js-details-container">
+        <div class="Link--primary Truncate-text">Title 1</div>
+        <div>
+          <div class="js-comment-body">${initialCommentText}</div>
+          <div class="js-comment-body">reply comment we don't care about</div>
+        </div>
+      </div>
+      <div class="js-file js-details-container">
+        <div class="Link--primary Truncate-text">Title 2</div>
+      </div>
+    </div>
+    `;
+  const mockCommentElement = document.createElement('div');
+  mockCommentElement.innerHTML = mockHtml;
+  return new CommentData(mockCommentElement, 'actual assignee');
+};
+
+const buildCommentDetails = (commentDetailText: string) => {
+  const mockHtml =
+    `
+    <div>${commentDetailText}</div>
+    `;
+  const mockHtmlElement = document.createElement('div');
+  mockHtmlElement.classList.add(COMMENT_DETAILS_CONTAINER_CLASS);
+  mockHtmlElement.innerHTML = mockHtml;
+  return mockHtmlElement;
+};
+
