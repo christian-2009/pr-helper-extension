@@ -1,11 +1,11 @@
-import { renderCommentInfo } from '../../src/modules/renderer/renderer';
+import { renderCommentInfo } from '../../../src/modules/renderer/renderer';
 import { screen } from '@testing-library/dom';
 import {
   COMMENT_DETAILS_CONTAINER_CLASS,
   COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
   OUTER_CONTAINER_CLASS
-} from '../../src/constants';
-import { CommentData } from '../../src/CommentData';
+} from '../../../src/constants';
+import { CommentData } from '../../../src/CommentData';
 
 describe('renderer', () => {
   beforeEach(() => {
@@ -84,12 +84,12 @@ describe('renderer', () => {
       expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
     });
 
-    it('should render comment details when new one added', () => {
+    it('should render multiple comment details when new one added', () => {
       // Given
       renderInitialCommentLeftToActionElement();
       const firstCommentDetail = 'first comment';
       const firstCommentData = buildCommentData(firstCommentDetail);
-      document.body.appendChild(buildCommentDetails(firstCommentDetail));
+      document.querySelector(OUTER_CONTAINER_CLASS)?.appendChild(buildCommentDetails(firstCommentDetail));
 
       const nextCommentData = buildCommentData('next comment');
 
