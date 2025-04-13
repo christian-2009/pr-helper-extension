@@ -1,6 +1,6 @@
 import { dataExtractor } from './dataExtractor';
 import { CommentData } from '../CommentData';
-import { renderCommentInfo } from './renderer/renderer';
+import { displayManager } from './displayManager/displayManager';
 
 export function prHelperExtension() {
   const {
@@ -14,5 +14,5 @@ export function prHelperExtension() {
   });
   const commentsLeftToAction = unresolvedCommentData.filter((comment) => !comment.hasBeenActioned);
 
-  renderCommentInfo(commentsLeftToAction.length, numberOfComments, commentsLeftToAction);
+  displayManager(commentsLeftToAction.length, numberOfComments, commentsLeftToAction);
 }

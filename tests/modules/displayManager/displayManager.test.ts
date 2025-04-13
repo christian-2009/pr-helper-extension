@@ -1,13 +1,13 @@
-import { renderCommentInfo } from '../../src/modules/renderer/renderer';
+import { displayManager } from '../../../src/modules/displayManager/displayManager';
 import { screen } from '@testing-library/dom';
 import {
   COMMENT_DETAILS_CONTAINER_CLASS,
   COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
   OUTER_CONTAINER_CLASS
-} from '../../src/constants';
-import { CommentData } from '../../src/CommentData';
+} from '../../../src/constants';
+import { CommentData } from '../../../src/CommentData';
 
-describe('renderer', () => {
+describe('display manager', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
 
@@ -22,7 +22,7 @@ describe('renderer', () => {
     const mockComments = Array.of<CommentData>();
 
     // When
-    renderCommentInfo(8, 20, mockComments);
+    displayManager(8, 20, mockComments);
 
     // Then
     expect(screen.getByText('8 comments left to action (20 total)')).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe('renderer', () => {
     renderInitialCommentLeftToActionElement('8 comments left to action (20 total)');
 
     // When
-    renderCommentInfo(newActionedComments, newTotalComments, mockComments);
+    displayManager(newActionedComments, newTotalComments, mockComments);
 
     // Then
     expect(screen.getByText(`${newActionedComments} comments left to action (${newTotalComments} total)`)).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe('renderer', () => {
     renderInitialCommentLeftToActionElement('2 comments left to action (20 total)');
 
     // When
-    renderCommentInfo(0, 0, mockComments);
+    displayManager(0, 0, mockComments);
 
     // Then
     expect(screen.queryByText(/comments left to action/i)).not.toBeInTheDocument();
@@ -64,7 +64,7 @@ describe('renderer', () => {
   it('should use comment in header if there is only 1 comment', () => {
     const mockComments = Array.of<CommentData>();
 
-    renderCommentInfo(1, 20, mockComments);
+    displayManager(1, 20, mockComments);
 
     expect(screen.getByText('1 comment left to action (20 total)')).toBeInTheDocument();
   });
@@ -77,24 +77,24 @@ describe('renderer', () => {
       const mockCommentData = Array.of(buildCommentData(mockComment));
 
       // When
-      renderCommentInfo(1, 5, mockCommentData);
+      displayManager(1, 5, mockCommentData);
 
       // Then
       expect(screen.getByText(mockComment)).toBeInTheDocument();
       expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
     });
 
-    it('should render comment details when new one added', () => {
+    it('should render multiple comment details when new one added', () => {
       // Given
       renderInitialCommentLeftToActionElement();
       const firstCommentDetail = 'first comment';
       const firstCommentData = buildCommentData(firstCommentDetail);
-      document.body.appendChild(buildCommentDetails(firstCommentDetail));
+      document.querySelector(OUTER_CONTAINER_CLASS)?.appendChild(buildCommentDetails(firstCommentDetail));
 
       const nextCommentData = buildCommentData('next comment');
 
       // When
-      renderCommentInfo(1, 5, [firstCommentData, nextCommentData]);
+      displayManager(1, 5, [firstCommentData, nextCommentData]);
 
       // Then
       expect(screen.getByText(firstCommentDetail)).toBeInTheDocument();
