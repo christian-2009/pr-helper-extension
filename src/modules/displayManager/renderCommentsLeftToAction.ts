@@ -9,7 +9,7 @@ import {
 export const renderCommentsLeftToAction = (
   commentsLeftToActionText: string,
   comments: CommentData[],
-  isCommentDetailsExpanded: boolean
+  expandCommentDetails: boolean
 ) => {
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
 
@@ -27,15 +27,29 @@ export const renderCommentsLeftToAction = (
 
   const commentDetailsContainer = document.createElement('div');
   commentDetailsContainer.classList.add('comment-details');
-  commentDetailsContainer.style.display = isCommentDetailsExpanded ? 'flex' : 'none';
+  commentDetailsContainer.style.display = expandCommentDetails ? 'flex' : 'none';
   innerContainer.addEventListener('click', () => {
     commentDetailsContainer.style.display = commentDetailsContainer.style.display === 'none' ? 'flex' : 'none';
   });
 
-  for (const comment of comments) {
-    const commentDetail = document.createElement('div');
-    commentDetail.textContent = comment.commentDescription;
-    commentDetailsContainer.appendChild(commentDetail);
+  // for (const comment of comments) {
+  //   const commentDetail = document.createElement('div');
+  //   commentDetail.textContent = comment.commentDescription;
+  //   commentDetailsContainer.appendChild(commentDetail);
+  // }
+
+  for (const [fileName, fileComments] of Object.entries(getCommentsWithinEachFile(comments))) {
+    const commentDetailsFileContainer = document.createElement('div');
+    commentDetailsFileContainer.textContent = fileName;
+
+    for (const commentDescription of fileComments) {
+      const commentDetail = document.createElement('div');
+      commentDetail.textContent = commentDescription;
+      commentDetailsFileContainer.appendChild(commentDetail);
+    }
+
+    commentDetailsContainer.appendChild(commentDetailsFileContainer);
+
   }
 
   innerContainer?.appendChild(commentsLeftToActionElementContainer);
@@ -43,3 +57,20 @@ export const renderCommentsLeftToAction = (
   outerContainer?.appendChild(innerContainer);
   headerContainer?.appendChild(outerContainer);
 };
+
+type commentsWithinEachFile = {
+  [key: string]: string[]
+}
+
+const getCommentsWithinEachFile = (comments: CommentData[]) => {
+  const commentsWithinEachFile: commentsWithinEachFile = {};
+  comments.forEach(comment => {
+    if (!commentsWithinEachFile[comment.fileName]) {
+      commentsWithinEachFile[comment.fileName] = [comment.commentDescription];
+      return;
+    }
+    commentsWithinEachFile[comment.fileName].push(comment.commentDescription);
+  });
+  return commentsWithinEachFile;
+};
+

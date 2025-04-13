@@ -8,13 +8,14 @@ export const displayManager = (
   totalNumberOfComments: number,
   comments: CommentData[]
 ) => {
+  const expandCommentDetails = isCommentDetailsExpanded();
   removeCommentsLeftToActionElementFromScreen();
   if (!totalNumberOfComments) {
     return;
   }
 
   const commentsLeftToActionText = `${numberOfCommentsLeftToAction} ${numberOfCommentsLeftToAction === 1 ? 'comment' : 'comments'} left to action (${totalNumberOfComments} total)`;
-  renderCommentsLeftToAction(commentsLeftToActionText, comments, isCommentDetailsExpanded());
+  renderCommentsLeftToAction(commentsLeftToActionText, comments, expandCommentDetails);
 };
 
 const removeCommentsLeftToActionElementFromScreen = () => {
