@@ -3,7 +3,7 @@ import { CommentData } from '../../CommentData';
 import { renderCommentsLeftToAction } from './renderCommentsLeftToAction';
 import { isCommentDetailsExpanded } from './utils';
 
-export const renderCommentInfo = (
+export const displayManager = (
   numberOfCommentsLeftToAction: number,
   totalNumberOfComments: number,
   comments: CommentData[]

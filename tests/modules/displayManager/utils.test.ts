@@ -1,5 +1,5 @@
 import { COMMENT_DETAILS_CONTAINER_CLASS } from '../../../src/constants';
-import { isCommentDetailsExpanded } from '../../../src/modules/renderer/utils';
+import { isCommentDetailsExpanded } from '../../../src/modules/displayManager/utils';
 
 describe('utils', () => {
   describe('isCommentDetailsExpanded', () => {
