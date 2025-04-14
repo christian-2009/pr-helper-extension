@@ -1,11 +1,9 @@
 import { displayManager } from '../../../src/modules/displayManager/displayManager';
 import { screen } from '@testing-library/dom';
-import {
-  COMMENT_DETAILS_CONTAINER_CLASS,
-  COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
-  OUTER_CONTAINER_CLASS
-} from '../../../src/constants';
-import { CommentData } from '../../../src/CommentData';
+import { COMMENTS_LEFT_TO_ACTION_HEADER_CLASS, OUTER_CONTAINER_CLASS } from '../../../src/constants';
+import { CommentData } from '../../../src/modules/CommentData';
+import { buildCommentData } from '../../testdata/commentDataBuilder';
+import { buildCommentDetails } from '../../testdata/commentDetailsBuilder';
 
 describe('display manager', () => {
   beforeEach(() => {
@@ -122,22 +120,5 @@ const renderInitialCommentLeftToActionElement = (text: string = '8 comments left
   document.body.appendChild(commentsLeftToActionElementContainer);
 };
 
-const buildCommentData = (initialCommentText: string, fileName: string) => {
-  const mockCommentElement = document.createElement('div');
-  const commentData = new CommentData(mockCommentElement, 'actual assignee');
-  commentData.fileName = fileName;
-  commentData.commentDescription = initialCommentText;
-  return commentData;
-};
 
-const buildCommentDetails = (commentDetailText: string) => {
-  const mockHtml =
-    `
-    <div>${commentDetailText}</div>
-    `;
-  const mockHtmlElement = document.createElement('div');
-  mockHtmlElement.classList.add(COMMENT_DETAILS_CONTAINER_CLASS);
-  mockHtmlElement.innerHTML = mockHtml;
-  return mockHtmlElement;
-};
 

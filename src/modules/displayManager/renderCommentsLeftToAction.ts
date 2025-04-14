@@ -1,4 +1,4 @@
-import { CommentData } from '../../CommentData';
+import { CommentData } from '../CommentData';
 import {
   COMMENT_DETAILS_CONTAINER_CLASS,
   COMMENT_DETAILS_FOR_FILE_CLASS,
@@ -8,11 +8,8 @@ import {
   OUTER_CONTAINER_CLASS,
   PR_HEADER_CONTAINER_SELECTOR
 } from '../../constants';
-import { createDivElement } from './helpers';
+import { createDivElement, mapCommentsToFileToCommentDescriptions } from './helpers';
 
-type fileToCommentDescriptions = {
-  [key: string]: string[]
-}
 
 export const renderCommentsLeftToAction = (
   commentsLeftToActionText: string,
@@ -51,15 +48,4 @@ export const renderCommentsLeftToAction = (
   headerContainer?.appendChild(outerContainer);
 };
 
-const mapCommentsToFileToCommentDescriptions = (comments: CommentData[]) => {
-  const commentsWithinEachFile: fileToCommentDescriptions = {};
-  comments.forEach(comment => {
-    if (!commentsWithinEachFile[comment.fileName]) {
-      commentsWithinEachFile[comment.fileName] = [comment.commentDescription];
-      return;
-    }
-    commentsWithinEachFile[comment.fileName].push(comment.commentDescription);
-  });
-  return commentsWithinEachFile;
-};
 

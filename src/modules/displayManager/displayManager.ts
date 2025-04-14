@@ -1,5 +1,5 @@
 import { OUTER_CONTAINER_CLASS } from '../../constants';
-import { CommentData } from '../../CommentData';
+import { CommentData } from '../CommentData';
 import { renderCommentsLeftToAction } from './renderCommentsLeftToAction';
 import { isCommentDetailsExpanded } from './helpers';
 
