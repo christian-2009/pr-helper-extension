@@ -1,4 +1,4 @@
-import { ASSIGNEE_SELECTOR, REACTION_SELECTOR } from './constants';
+import { ASSIGNEE_SELECTOR, REACTION_SELECTOR } from '../constants';
 
 export class CommentData {
   hasBeenActioned: boolean;

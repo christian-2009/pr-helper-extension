@@ -1,4 +1,4 @@
-import { dataExtractor } from '../../src/modules/dataExtractor';
+import { dataExtractor } from '../../../src/modules/dataExtractor/dataExtractor';
 
 describe('dataExtractor', () => {
   beforeEach(() => {

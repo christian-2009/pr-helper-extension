@@ -1,11 +1,9 @@
 import { displayManager } from '../../../src/modules/displayManager/displayManager';
 import { screen } from '@testing-library/dom';
-import {
-  COMMENT_DETAILS_CONTAINER_CLASS,
-  COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
-  OUTER_CONTAINER_CLASS
-} from '../../../src/constants';
-import { CommentData } from '../../../src/CommentData';
+import { COMMENTS_LEFT_TO_ACTION_HEADER_CLASS, OUTER_CONTAINER_CLASS } from '../../../src/constants';
+import { CommentData } from '../../../src/modules/CommentData';
+import { buildCommentData } from '../../testdata/commentDataBuilder';
+import { buildCommentDetails } from '../../testdata/commentDetailsBuilder';
 
 describe('display manager', () => {
   beforeEach(() => {
@@ -17,56 +15,58 @@ describe('display manager', () => {
     document.body.appendChild(headerElementMock);
   });
 
-  it('renders comments that need actioning correctly initially', () => {
-    // Given
-    const mockComments = Array.of<CommentData>();
+  describe('comments left to action', () => {
+    it('renders comments that need actioning correctly initially', () => {
+      // Given
+      const mockComments = Array.of<CommentData>();
 
-    // When
-    displayManager(8, 20, mockComments);
+      // When
+      displayManager(8, 20, mockComments);
 
-    // Then
-    expect(screen.getByText('8 comments left to action (20 total)')).toBeInTheDocument();
-  });
+      // Then
+      expect(screen.getByText('8 comments left to action (20 total)')).toBeInTheDocument();
+    });
 
-  it.each([
-    [9, 20],
-    [8, 21],
-    [8, 19],
-    [9, 19]
-  ])('renders updated comments left to action comments correctly if there is one already in the DOM', (
-    newActionedComments,
-    newTotalComments
-  ) => {
-    // Given
-    const mockComments = Array.of<CommentData>();
-    renderInitialCommentLeftToActionElement('8 comments left to action (20 total)');
+    it.each([
+      [9, 20],
+      [8, 21],
+      [8, 19],
+      [9, 19]
+    ])('renders updated comments left to action comments correctly if there is one already in the DOM', (
+      newActionedComments,
+      newTotalComments
+    ) => {
+      // Given
+      const mockComments = Array.of<CommentData>();
+      renderInitialCommentLeftToActionElement('8 comments left to action (20 total)');
 
-    // When
-    displayManager(newActionedComments, newTotalComments, mockComments);
+      // When
+      displayManager(newActionedComments, newTotalComments, mockComments);
 
-    // Then
-    expect(screen.getByText(`${newActionedComments} comments left to action (${newTotalComments} total)`)).toBeInTheDocument();
-    expect(screen.queryByText('8 comments left to action (20 total)')).not.toBeInTheDocument();
-  });
+      // Then
+      expect(screen.getByText(`${newActionedComments} comments left to action (${newTotalComments} total)`)).toBeInTheDocument();
+      expect(screen.queryByText('8 comments left to action (20 total)')).not.toBeInTheDocument();
+    });
 
-  it('should remove comments left to actions comments section if there are no comments on pr currently', () => {
-    // Given
-    const mockComments = Array.of<CommentData>();
-    renderInitialCommentLeftToActionElement('2 comments left to action (20 total)');
+    it('should remove comments left to actions comments section if there are no comments on pr currently', () => {
+      // Given
+      const mockComments = Array.of<CommentData>();
+      renderInitialCommentLeftToActionElement('2 comments left to action (20 total)');
 
-    // When
-    displayManager(0, 0, mockComments);
+      // When
+      displayManager(0, 0, mockComments);
 
-    // Then
-    expect(screen.queryByText(/comments left to action/i)).not.toBeInTheDocument();
-  });
+      // Then
+      expect(screen.queryByText(/comments left to action/i)).not.toBeInTheDocument();
+    });
 
-  it('should use comment in header if there is only 1 comment', () => {
-    const mockComments = Array.of<CommentData>();
+    it('should use comment in header if there is only 1 comment', () => {
+      const mockComments = Array.of<CommentData>();
 
-    displayManager(1, 20, mockComments);
+      displayManager(1, 20, mockComments);
 
-    expect(screen.getByText('1 comment left to action (20 total)')).toBeInTheDocument();
+      expect(screen.getByText('1 comment left to action (20 total)')).toBeInTheDocument();
+    });
   });
 
   describe('comment details', () => {
@@ -74,7 +74,7 @@ describe('display manager', () => {
     it('should render comment details correctly', () => {
       // Given
       const mockComment = 'first comment that should show';
-      const mockCommentData = Array.of(buildCommentData(mockComment));
+      const mockCommentData = Array.of(buildCommentData(mockComment, 'file'));
 
       // When
       displayManager(1, 5, mockCommentData);
@@ -82,16 +82,17 @@ describe('display manager', () => {
       // Then
       expect(screen.getByText(mockComment)).toBeInTheDocument();
       expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
+      expect(screen.getByText('file')).toBeInTheDocument();
     });
 
     it('should render multiple comment details when new one added', () => {
       // Given
       renderInitialCommentLeftToActionElement();
       const firstCommentDetail = 'first comment';
-      const firstCommentData = buildCommentData(firstCommentDetail);
+      const firstCommentData = buildCommentData(firstCommentDetail, 'file');
       document.querySelector(OUTER_CONTAINER_CLASS)?.appendChild(buildCommentDetails(firstCommentDetail));
 
-      const nextCommentData = buildCommentData('next comment');
+      const nextCommentData = buildCommentData('next comment', 'file2');
 
       // When
       displayManager(1, 5, [firstCommentData, nextCommentData]);
@@ -99,6 +100,8 @@ describe('display manager', () => {
       // Then
       expect(screen.getByText(firstCommentDetail)).toBeInTheDocument();
       expect(screen.getByText('next comment')).toBeInTheDocument();
+      expect(screen.getByText('file')).toBeInTheDocument();
+      expect(screen.getByText('file2')).toBeInTheDocument();
     });
   });
 
@@ -117,35 +120,5 @@ const renderInitialCommentLeftToActionElement = (text: string = '8 comments left
   document.body.appendChild(commentsLeftToActionElementContainer);
 };
 
-const buildCommentData = (initialCommentText: string) => {
-  const mockHtml =
-    `
-    <div>
-      <div class="js-file js-details-container">
-        <div class="Link--primary Truncate-text">Title 1</div>
-        <div>
-          <div class="js-comment-body">${initialCommentText}</div>
-          <div class="js-comment-body">reply comment we don't care about</div>
-        </div>
-      </div>
-      <div class="js-file js-details-container">
-        <div class="Link--primary Truncate-text">Title 2</div>
-      </div>
-    </div>
-    `;
-  const mockCommentElement = document.createElement('div');
-  mockCommentElement.innerHTML = mockHtml;
-  return new CommentData(mockCommentElement, 'actual assignee');
-};
 
-const buildCommentDetails = (commentDetailText: string) => {
-  const mockHtml =
-    `
-    <div>${commentDetailText}</div>
-    `;
-  const mockHtmlElement = document.createElement('div');
-  mockHtmlElement.classList.add(COMMENT_DETAILS_CONTAINER_CLASS);
-  mockHtmlElement.innerHTML = mockHtml;
-  return mockHtmlElement;
-};
 

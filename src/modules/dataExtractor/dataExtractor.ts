@@ -1,4 +1,4 @@
-import { ASSIGNEE_SELECTOR } from '../constants';
+import { ASSIGNEE_SELECTOR } from '../../constants';
 
 export const dataExtractor = () => {
   const unresolvedComments = document.querySelectorAll('[data-resolved = \'false\']');

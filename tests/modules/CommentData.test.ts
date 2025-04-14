@@ -1,4 +1,4 @@
-import { CommentData } from '../src/CommentData';
+import { CommentData } from '../../src/modules/CommentData';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 

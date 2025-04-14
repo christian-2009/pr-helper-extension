@@ -1,5 +1,5 @@
-import { dataExtractor } from './dataExtractor';
-import { CommentData } from '../CommentData';
+import { dataExtractor } from './dataExtractor/dataExtractor';
+import { CommentData } from './CommentData';
 import { displayManager } from './displayManager/displayManager';
 
 export function prHelperExtension() {

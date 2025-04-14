@@ -1,45 +1,51 @@
-import { CommentData } from '../../CommentData';
+import { CommentData } from '../CommentData';
 import {
+  COMMENT_DETAILS_CONTAINER_CLASS,
+  COMMENT_DETAILS_FOR_FILE_CLASS,
   COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
+  FILE_NAME_TEXT_CLASS,
   INNER_CONTAINER_CLASS,
   OUTER_CONTAINER_CLASS,
   PR_HEADER_CONTAINER_SELECTOR
 } from '../../constants';
+import { createDivElement, mapCommentsToFileToCommentDescriptions } from './helpers';
+
 
 export const renderCommentsLeftToAction = (
   commentsLeftToActionText: string,
   comments: CommentData[],
-  isCommentDetailsExpanded: boolean
+  expandCommentDetails: boolean
 ) => {
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
 
-  const outerContainer = document.createElement('div');
   //need to add id to use getElementById if removing actioned comments from screen
-  outerContainer.id = OUTER_CONTAINER_CLASS;
-  outerContainer.classList.add(OUTER_CONTAINER_CLASS);
+  const outerContainer = createDivElement(OUTER_CONTAINER_CLASS, undefined, OUTER_CONTAINER_CLASS);
 
-  const innerContainer = document.createElement('div');
-  innerContainer.classList.add(INNER_CONTAINER_CLASS);
+  const innerContainer = createDivElement(INNER_CONTAINER_CLASS);
 
-  const commentsLeftToActionElementContainer = document.createElement('div');
-  commentsLeftToActionElementContainer.classList.add(COMMENTS_LEFT_TO_ACTION_HEADER_CLASS);
-  commentsLeftToActionElementContainer.textContent = commentsLeftToActionText;
+  const commentsLeftToActionElementContainer = createDivElement(COMMENTS_LEFT_TO_ACTION_HEADER_CLASS, commentsLeftToActionText);
 
-  const commentDetailsContainer = document.createElement('div');
-  commentDetailsContainer.classList.add('comment-details');
-  commentDetailsContainer.style.display = isCommentDetailsExpanded ? 'flex' : 'none';
+  const commentDetailsContainer = createDivElement(COMMENT_DETAILS_CONTAINER_CLASS);
+  commentDetailsContainer.style.display = expandCommentDetails ? 'flex' : 'none';
   innerContainer.addEventListener('click', () => {
     commentDetailsContainer.style.display = commentDetailsContainer.style.display === 'none' ? 'flex' : 'none';
   });
 
-  for (const comment of comments) {
-    const commentDetail = document.createElement('div');
-    commentDetail.textContent = comment.commentDescription;
-    commentDetailsContainer.appendChild(commentDetail);
+  for (const [fileName, fileComments] of Object.entries(mapCommentsToFileToCommentDescriptions(comments))) {
+    const individualFileCommentsDetailsContainer = document.createElement('div');
+    const fileNameElement = createDivElement(FILE_NAME_TEXT_CLASS, fileName);
+    individualFileCommentsDetailsContainer.appendChild(fileNameElement);
+
+    for (const commentDescription of fileComments) {
+      const commentDetail = createDivElement(COMMENT_DETAILS_FOR_FILE_CLASS, commentDescription);
+      individualFileCommentsDetailsContainer.appendChild(commentDetail);
+    }
+    commentDetailsContainer.appendChild(individualFileCommentsDetailsContainer);
   }
 
-  innerContainer?.appendChild(commentsLeftToActionElementContainer);
-  innerContainer.appendChild(commentDetailsContainer);
+  innerContainer?.append(commentsLeftToActionElementContainer, commentDetailsContainer);
   outerContainer?.appendChild(innerContainer);
   headerContainer?.appendChild(outerContainer);
 };
+
+
