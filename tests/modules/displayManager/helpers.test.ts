@@ -1,7 +1,7 @@
 import { COMMENT_DETAILS_CONTAINER_CLASS } from '../../../src/constants';
-import { isCommentDetailsExpanded } from '../../../src/modules/displayManager/utils';
+import { createDivElement, isCommentDetailsExpanded } from '../../../src/modules/displayManager/helpers';
 
-describe('utils', () => {
+describe('helpers', () => {
   describe('isCommentDetailsExpanded', () => {
     beforeEach(() => {
       document.body.innerHTML = '';
@@ -34,6 +34,28 @@ describe('utils', () => {
       // Then
       expect(actual).toBe(false);
     });
+  });
 
+  describe('createDivElement', () => {
+    it.each(
+      [
+        ['mock-class', 'some text', 'id'],
+        ['mock-class', 'some text', undefined],
+        ['mock-class', undefined, undefined]
+      ]
+    )('should create a div element with correct properties', (
+      className,
+      textContent,
+      id
+    ) => {
+      // Given
+      // When
+      const actual = createDivElement(className, textContent, id);
+
+      // Then
+      expect(actual.className).toEqual(className);
+      textContent ? expect(actual.textContent).toEqual(textContent) : expect(actual.textContent).toEqual('');
+      id ? expect(actual.id).toEqual(id) : expect(actual.id).toEqual('');
+    });
   });
 });

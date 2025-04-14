@@ -1,7 +1,7 @@
 import { OUTER_CONTAINER_CLASS } from '../../constants';
 import { CommentData } from '../../CommentData';
 import { renderCommentsLeftToAction } from './renderCommentsLeftToAction';
-import { isCommentDetailsExpanded } from './utils';
+import { isCommentDetailsExpanded } from './helpers';
 
 export const displayManager = (
   numberOfCommentsLeftToAction: number,

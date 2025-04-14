@@ -9,3 +9,5 @@ export const INNER_CONTAINER_CLASS = 'comments-actioned-inner-container';
 export const COMMENT_DETAILS_CONTAINER_CLASS = 'comment-details';
 export const COMMENT_DETAILS_CONTAINER_SELECTOR = '.comment-details';
 export const COMMENTS_LEFT_TO_ACTION_HEADER_SELECTOR = '.comments-actioned';
+export const FILE_NAME_TEXT_CLASS = 'file-name-text';
+export const COMMENT_DETAILS_FOR_FILE_CLASS = 'comment-details-for-file';
