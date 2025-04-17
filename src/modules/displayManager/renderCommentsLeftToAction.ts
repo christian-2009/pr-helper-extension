@@ -8,7 +8,7 @@ import {
   OUTER_CONTAINER_CLASS,
   PR_HEADER_CONTAINER_SELECTOR
 } from '../../constants';
-import { createDivElement, mapCommentsToFileToCommentDescriptions } from './helpers';
+import { createDivElement, mapCommentsToFileToComments } from './helpers';
 
 
 export const renderCommentsLeftToAction = (
@@ -27,17 +27,20 @@ export const renderCommentsLeftToAction = (
 
   const commentDetailsContainer = createDivElement(COMMENT_DETAILS_CONTAINER_CLASS);
   commentDetailsContainer.style.display = expandCommentDetails ? 'flex' : 'none';
-  innerContainer.addEventListener('click', () => {
+  commentsLeftToActionElementContainer.addEventListener('click', () => {
     commentDetailsContainer.style.display = commentDetailsContainer.style.display === 'none' ? 'flex' : 'none';
   });
 
-  for (const [fileName, fileComments] of Object.entries(mapCommentsToFileToCommentDescriptions(comments))) {
+  for (const [fileName, commentsForFile] of Object.entries(mapCommentsToFileToComments(comments))) {
     const individualFileCommentsDetailsContainer = document.createElement('div');
     const fileNameElement = createDivElement(FILE_NAME_TEXT_CLASS, fileName);
     individualFileCommentsDetailsContainer.appendChild(fileNameElement);
 
-    for (const commentDescription of fileComments) {
-      const commentDetail = createDivElement(COMMENT_DETAILS_FOR_FILE_CLASS, commentDescription);
+    for (const comment of commentsForFile) {
+      const commentDetail = createDivElement(COMMENT_DETAILS_FOR_FILE_CLASS, comment.commentDescription);
+      commentDetail.addEventListener('click', () => {
+        comment.commentElement.scrollIntoView({ behavior: 'smooth' });
+      });
       individualFileCommentsDetailsContainer.appendChild(commentDetail);
     }
     commentDetailsContainer.appendChild(individualFileCommentsDetailsContainer);

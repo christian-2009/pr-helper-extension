@@ -2,8 +2,8 @@ import { CommentData } from '../../src/modules/CommentData';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-const comment_with_reply_mock_html = fs.readFileSync(path.resolve(__dirname, '../tests/__fixtures__/comment_with_reply_mock.html'), 'utf-8');
-const pr_with_multiple_files_and_comments = fs.readFileSync(path.resolve(__dirname, '../tests/__fixtures__/pr_with_multiple_files_and_comments.html'), 'utf-8');
+const comment_with_reply_mock_html = fs.readFileSync(path.resolve(__dirname, '../../tests/__fixtures__/comment_with_reply_mock.html'), 'utf-8');
+const pr_with_multiple_files_and_comments = fs.readFileSync(path.resolve(__dirname, '../../tests/__fixtures__/pr_with_multiple_files_and_comments.html'), 'utf-8');
 
 describe('CommentData', () => {
   const assignee = 'some-assignee';
