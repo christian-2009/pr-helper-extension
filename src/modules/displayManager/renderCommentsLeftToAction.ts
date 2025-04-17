@@ -3,7 +3,6 @@ import {
   COMMENT_DETAILS_CONTAINER_CLASS,
   COMMENT_DETAILS_FOR_FILE_CLASS,
   COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
-  FILE_NAME_TEXT_CLASS,
   INNER_CONTAINER_CLASS,
   OUTER_CONTAINER_CLASS,
   PR_HEADER_CONTAINER_SELECTOR
@@ -32,18 +31,17 @@ export const renderCommentsLeftToAction = (
   });
 
   for (const [fileName, commentsForFile] of Object.entries(mapCommentsToFileToComments(comments))) {
-    const individualFileCommentsDetailsContainer = document.createElement('div');
-    const fileNameElement = createDivElement(FILE_NAME_TEXT_CLASS, fileName);
-    individualFileCommentsDetailsContainer.appendChild(fileNameElement);
-
     for (const comment of commentsForFile) {
-      const commentDetail = createDivElement(COMMENT_DETAILS_FOR_FILE_CLASS, comment.commentDescription);
+      const commentDetail = createDivElement(COMMENT_DETAILS_FOR_FILE_CLASS);
+      const commentDetailText = createDivElement('comment-text', comment.commentDescription);
       commentDetail.addEventListener('click', () => {
         comment.commentElement.scrollIntoView({ behavior: 'smooth' });
       });
-      individualFileCommentsDetailsContainer.appendChild(commentDetail);
+      const commentDetailFileName = createDivElement('comment-file', fileName);
+
+      commentDetail.append(commentDetailText, commentDetailFileName);
+      commentDetailsContainer.appendChild(commentDetail);
     }
-    commentDetailsContainer.appendChild(individualFileCommentsDetailsContainer);
   }
 
   innerContainer?.append(commentsLeftToActionElementContainer, commentDetailsContainer);
