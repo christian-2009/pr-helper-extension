@@ -1,8 +1,8 @@
 import { COMMENT_DETAILS_CONTAINER_SELECTOR } from '../../constants';
 import { CommentData } from '../CommentData';
 
-type fileToCommentDescriptions = {
-  [key: string]: string[]
+type fileToComments = {
+  [key: string]: CommentData[]
 }
 
 export const isCommentDetailsExpanded = () => {
@@ -20,14 +20,14 @@ export const createDivElement = (className: string, textContent?: string, id?: s
   return divElement;
 };
 
-export const mapCommentsToFileToCommentDescriptions = (comments: CommentData[]) => {
-  const commentsWithinEachFile: fileToCommentDescriptions = {};
+export const mapCommentsToFileToComments = (comments: CommentData[]): fileToComments => {
+  const commentsWithinEachFile: fileToComments = {};
   comments.forEach(comment => {
     if (!commentsWithinEachFile[comment.fileName]) {
-      commentsWithinEachFile[comment.fileName] = [comment.commentDescription];
+      commentsWithinEachFile[comment.fileName] = [comment];
       return;
     }
-    commentsWithinEachFile[comment.fileName].push(comment.commentDescription);
+    commentsWithinEachFile[comment.fileName].push(comment);
   });
   return commentsWithinEachFile;
 };

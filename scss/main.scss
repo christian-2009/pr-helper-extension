@@ -9,7 +9,7 @@
   margin-bottom: 0.6rem;
   background-color: #4169E1;
   color: white;
-  padding: 0.1em 0.6em;
+  padding: 0.3em 0.6em;
   border-radius: 0.5em;
   width: auto;
 }
@@ -17,6 +17,8 @@
 .comments-actioned {
   font-size: 1.2rem;
   font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .comment-details {
@@ -32,4 +34,10 @@
 
 .comment-details-for-file {
   padding-left: 0.8em;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.comment-details-for-file:hover {
+  transform: scale(1.05);
 }

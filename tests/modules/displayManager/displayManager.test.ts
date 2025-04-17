@@ -71,16 +71,22 @@ describe('display manager', () => {
 
   describe('comment details', () => {
     // for these tests we don't care about the numberOfCommentsLeftToAction and totalNumberOfComments passed to renderCommentInfo
-    it('should render comment details correctly', () => {
+    it('should render comment details correctly, and attach scrollIntoView on click', () => {
       // Given
       const mockComment = 'first comment that should show';
       const mockCommentData = Array.of(buildCommentData(mockComment, 'file'));
+      const scrollMock = jest.fn();
+      mockCommentData[0].commentElement.scrollIntoView = scrollMock;
 
       // When
       displayManager(1, 5, mockCommentData);
 
       // Then
-      expect(screen.getByText(mockComment)).toBeInTheDocument();
+      const mockCommentElement = screen.getByText(mockComment);
+      expect(mockCommentElement).toBeInTheDocument();
+      mockCommentElement.click();
+      expect(scrollMock).toHaveBeenCalled();
+      
       expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
       expect(screen.getByText('file')).toBeInTheDocument();
     });
