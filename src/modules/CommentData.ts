@@ -6,20 +6,21 @@ export class CommentData {
   fileName: string;
 
   constructor(public commentElement: Element, public assignee: string) {
-    this.hasBeenActioned = this.hasReaction();
+    this.hasBeenActioned = this.hasReaction() || this.isLastReplyFromAssignee();
     this.commentDescription = this.getCommentDescription();
     this.fileName = this.getFileName();
   }
 
   isLastReplyFromAssignee = () => {
-    const replies = this.commentElement.children;
-    const hasReplies = this.commentElement.children.length > 1;
+    const repliesAuthors = this.commentElement.querySelectorAll(ASSIGNEE_SELECTOR);
+    const hasReplies = repliesAuthors.length > 1;
+
     if (!hasReplies) {
       return false;
     }
 
-    const lastReply = replies[replies.length - 1];
-    return lastReply.querySelector(ASSIGNEE_SELECTOR)?.textContent === this.assignee;
+    const lastReplyAuthor = repliesAuthors[repliesAuthors.length - 1].textContent;
+    return lastReplyAuthor === this.assignee;
   };
 
   hasReaction = () => !!this.commentElement.querySelector(REACTION_SELECTOR)?.textContent;

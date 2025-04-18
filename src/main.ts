@@ -1,5 +1,5 @@
 import { prHelperExtension } from './modules';
-import { COMMENTS_SELECTOR, PR_FILES_URL_REGEX, REACTION_SELECTOR } from './constants';
+import { COMMENTS_SELECTOR, PR_FILES_URL_REGEX, REACTION_SELECTOR, REPLY_SELECTOR } from './constants';
 
 const observeUrlChange = (isInitialLoad: boolean) => {
   let oldHref = document.location.href;
@@ -34,13 +34,13 @@ const observeChangesToComments = () => {
   const observer = new MutationObserver((mutations) => {
     mutations.forEach(mutation => {
       mutation.removedNodes.forEach((node) => {
-        if (node instanceof HTMLElement && (elementIsReaction(node) || elementIsComment(node))) {
+        if (node instanceof HTMLElement && (elementIsReaction(node) || elementIsComment(node) || elementIsReply(node))) {
           prHelperExtension();
         }
       });
 
       mutation.addedNodes.forEach((node) => {
-        if (node instanceof HTMLElement && (elementIsReaction(node) || elementIsComment(node))) {
+        if (node instanceof HTMLElement && (elementIsReaction(node) || elementIsComment(node) || elementIsReply(node))) {
           prHelperExtension();
         }
       });
@@ -52,6 +52,9 @@ const observeChangesToComments = () => {
 const elementIsReaction = (node: HTMLElement) => node.querySelector(REACTION_SELECTOR);
 
 const elementIsComment = (node: HTMLElement) => node.querySelector(COMMENTS_SELECTOR);
+
+// use .matches to check node itself, not children
+const elementIsReply = (node: HTMLElement) => node.matches(REPLY_SELECTOR);
 
 const doesUrlMatchPrFileViewUrl = (url: string) => PR_FILES_URL_REGEX.test(url);
 
