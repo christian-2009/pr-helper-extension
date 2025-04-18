@@ -7,7 +7,7 @@ import {
   OUTER_CONTAINER_CLASS,
   PR_HEADER_CONTAINER_SELECTOR
 } from '../../constants';
-import { createDivElement, mapCommentsToFileToComments } from './helpers';
+import { createDivElement } from './helpers';
 
 
 export const renderCommentsLeftToAction = (
@@ -30,23 +30,25 @@ export const renderCommentsLeftToAction = (
     commentDetailsContainer.style.display = commentDetailsContainer.style.display === 'none' ? 'flex' : 'none';
   });
 
-  for (const [fileName, commentsForFile] of Object.entries(mapCommentsToFileToComments(comments))) {
-    for (const comment of commentsForFile) {
-      const commentDetail = createDivElement(COMMENT_DETAILS_FOR_FILE_CLASS);
-      const commentDetailText = createDivElement('comment-text', comment.commentDescription);
-      commentDetail.addEventListener('click', () => {
-        comment.commentElement.scrollIntoView({ behavior: 'smooth' });
-      });
-      const commentDetailFileName = createDivElement('comment-file', fileName);
-
-      commentDetail.append(commentDetailText, commentDetailFileName);
-      commentDetailsContainer.appendChild(commentDetail);
-    }
-  }
+  addCommentDetailsToContainer(commentDetailsContainer, comments);
 
   innerContainer?.append(commentsLeftToActionElementContainer, commentDetailsContainer);
   outerContainer?.appendChild(innerContainer);
   headerContainer?.appendChild(outerContainer);
+};
+
+const addCommentDetailsToContainer = (commentDetailsContainer: HTMLDivElement, comments: CommentData[]) => {
+  for (const comment of comments) {
+    const commentDetail = createDivElement(COMMENT_DETAILS_FOR_FILE_CLASS);
+    const commentDetailText = createDivElement('comment-text', comment.commentDescription);
+    commentDetail.addEventListener('click', () => {
+      comment.commentElement.scrollIntoView({ behavior: 'smooth' });
+    });
+    const commentDetailFileName = createDivElement('comment-file', comment.fileName);
+
+    commentDetail.append(commentDetailText, commentDetailFileName);
+    commentDetailsContainer.appendChild(commentDetail);
+  }
 };
 
 
