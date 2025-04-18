@@ -20,6 +20,7 @@ $comment-detail-filename-color: #6b7280;
   padding: 0.3em 0.6em;
   border-radius: 0.5em;
   width: auto;
+  max-width: 25%;
 }
 
 .comments-actioned {
@@ -55,16 +56,15 @@ $comment-detail-filename-color: #6b7280;
     cursor: pointer;
     border: 1px solid $comment-detail-border;
     border-radius: 0.5em;
-
-    //background-color: #f3f4f6;
-    //border-color: #d1d5db; /* Tailwind gray-300 */
-    //box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .comment-text {
     color: $comment-detail-text-color;
     font-size: 0.95rem;
     margin-bottom: 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .comment-file {
@@ -73,7 +73,3 @@ $comment-detail-filename-color: #6b7280;
     word-break: break-all;
   }
 }
-
-//.comment-details-for-file:hover {
-//  transform: scale(1.05);
-//}
