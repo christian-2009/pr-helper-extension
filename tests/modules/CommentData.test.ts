@@ -37,6 +37,8 @@ describe('CommentData', () => {
       // Given
       const commentElement = document.createElement('div');
       const firstComment = document.createElement('div');
+      firstComment.classList.add('author');
+      firstComment.textContent = 'first author';
       firstComment.textContent = 'first comment';
       commentElement.appendChild(firstComment);
 
