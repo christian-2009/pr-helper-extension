@@ -23,11 +23,22 @@ export const renderCommentsLeftToAction = (
   const innerContainer = createDivElement(INNER_CONTAINER_CLASS);
 
   const commentsLeftToActionElementContainer = createDivElement(COMMENTS_LEFT_TO_ACTION_HEADER_CLASS, commentsLeftToActionText);
+  const dropdownIcon = document.createElement('span');
+  dropdownIcon.classList.add('arrow', 'right');
+  commentsLeftToActionElementContainer.appendChild(dropdownIcon);
 
   const commentDetailsContainer = createDivElement(COMMENT_DETAILS_CONTAINER_CLASS);
   commentDetailsContainer.style.display = expandCommentDetails ? 'flex' : 'none';
   commentsLeftToActionElementContainer.addEventListener('click', () => {
-    commentDetailsContainer.style.display = commentDetailsContainer.style.display === 'none' ? 'flex' : 'none';
+    if (commentDetailsContainer.style.display === 'none') {
+      commentDetailsContainer.style.display = 'flex';
+      dropdownIcon.classList.remove('right');
+      dropdownIcon.classList.add('down');
+    } else {
+      commentDetailsContainer.style.display = 'none';
+      dropdownIcon.classList.remove('down');
+      dropdownIcon.classList.add('right');
+    }
   });
 
   addCommentDetailsToContainer(commentDetailsContainer, comments);

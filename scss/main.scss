@@ -73,3 +73,21 @@ $comment-detail-filename-color: #6b7280;
     word-break: break-all;
   }
 }
+
+.arrow {
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
+  margin-left: 5px;
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.right {
+  transform: rotate(-45deg);
+}
+
+.down {
+  transform: rotate(45deg);
+}
