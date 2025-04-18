@@ -1,3 +1,11 @@
+$container-background: #f9fafb;
+$container-border: #e5e7eb;
+$comment-detail-background: #fff;
+$comment-detail-border: #e5e7eb;
+$comment-detail-background-hover: #f0f9ff;
+$comment-detail-text-color: #111827;
+$comment-detail-filename-color: #6b7280;
+
 .comments-actioned-outer-container {
   //width: 100%;
   display: flex;
@@ -7,11 +15,12 @@
 
 .comments-actioned-inner-container {
   margin-bottom: 0.6rem;
-  background-color: #4169E1;
-  color: white;
+  background: $container-background;
+  border: 1px solid $container-border;
   padding: 0.3em 0.6em;
   border-radius: 0.5em;
   width: auto;
+  max-width: 25%;
 }
 
 .comments-actioned {
@@ -21,7 +30,7 @@
   transition: background-color 0.2s ease;
 }
 
-.comment-details {
+.comment-details-container {
   display: none;
   flex-direction: column;
   overflow: hidden;
@@ -36,8 +45,31 @@
   padding-left: 0.8em;
   cursor: pointer;
   transition: background-color 0.2s ease;
-}
+  background-color: $comment-detail-background;
+  border: 1px solid $comment-detail-border;
+  margin-top: 0.5em;
+  border-radius: 0.5em;
 
-.comment-details-for-file:hover {
-  transform: scale(1.05);
+
+  &:hover {
+    background-color: $comment-detail-background-hover;
+    cursor: pointer;
+    border: 1px solid $comment-detail-border;
+    border-radius: 0.5em;
+  }
+
+  .comment-text {
+    color: $comment-detail-text-color;
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .comment-file {
+    font-size: 0.85rem;
+    color: $comment-detail-filename-color;
+    word-break: break-all;
+  }
 }

@@ -19,15 +19,3 @@ export const createDivElement = (className: string, textContent?: string, id?: s
 
   return divElement;
 };
-
-export const mapCommentsToFileToComments = (comments: CommentData[]): fileToComments => {
-  const commentsWithinEachFile: fileToComments = {};
-  comments.forEach(comment => {
-    if (!commentsWithinEachFile[comment.fileName]) {
-      commentsWithinEachFile[comment.fileName] = [comment];
-      return;
-    }
-    commentsWithinEachFile[comment.fileName].push(comment);
-  });
-  return commentsWithinEachFile;
-};
