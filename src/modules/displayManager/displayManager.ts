@@ -10,7 +10,7 @@ export const displayManager = (
 ) => {
   const expandCommentDetails = isCommentDetailsExpanded();
   removeCommentsLeftToActionElementFromScreen();
-  if (!totalNumberOfComments) {
+  if (!totalNumberOfComments || !numberOfCommentsLeftToAction) {
     return;
   }
 
