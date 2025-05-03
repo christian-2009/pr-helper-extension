@@ -1,9 +1,4 @@
 import { COMMENT_DETAILS_CONTAINER_SELECTOR } from '../../constants';
-import { CommentData } from '../CommentData';
-
-type fileToComments = {
-  [key: string]: CommentData[]
-}
 
 export const isCommentDetailsExpanded = () => {
   const commentDetailsElement = document.querySelector(COMMENT_DETAILS_CONTAINER_SELECTOR) ?? null;
