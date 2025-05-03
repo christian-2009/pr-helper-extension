@@ -10,13 +10,17 @@
   ],
   "content_scripts": [
     {
-      "matches":["https://github.com/*"],
+      "matches": [
+        "https://github.com/*"
+      ],
       "js": [
         "main.js"
       ]
     }
   ],
-  "action": {},
+  "action": {
+    "default_popup": "popup.html"
+  },
   "background": {
     "service_worker": "background.js"
   }
