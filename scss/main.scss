@@ -91,3 +91,23 @@ $comment-detail-filename-color: #6b7280;
 .down {
   transform: rotate(45deg);
 }
+
+@media (max-width: 1000px) and (min-width: 700px) {
+  .comments-actioned-inner-container {
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 700px) {
+  .comments-actioned-inner-container {
+    width: 100%;
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 400px) {
+  .comments-actioned-inner-container {
+    width: 100%;
+    max-width: 100%;
+  }
+}
