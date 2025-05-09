@@ -1,10 +1,25 @@
-$container-background: #f9fafb;
-$container-border: #e5e7eb;
-$comment-detail-background: #fff;
-$comment-detail-border: #e5e7eb;
-$comment-detail-background-hover: #f0f9ff;
-$comment-detail-text-color: #111827;
-$comment-detail-filename-color: #6b7280;
+:root {
+  --container-background: #f9fafb;
+  --container-border: #e5e7eb;
+  --comment-detail-background: #ffffff;
+  --comment-detail-border: #e5e7eb;
+  --comment-detail-background-hover: #f0f9ff;
+  --comment-detail-text-color: #111827;
+  --comment-detail-filename-color: #6b7280;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --container-background: #1f2937;
+    --container-border: #374151;
+    --comment-detail-background: #111827;
+    --comment-detail-border: #374151;
+    --comment-detail-background-hover: #1e40af;
+    --comment-detail-text-color: #f9fafb;
+    --comment-detail-filename-color: #9ca3af;
+  }
+}
 
 .comments-actioned-outer-container {
   //width: 100%;
@@ -15,8 +30,8 @@ $comment-detail-filename-color: #6b7280;
 
 .comments-actioned-inner-container {
   margin-bottom: 0.6rem;
-  background: $container-background;
-  border: 1px solid $container-border;
+  background: var(--container-background);
+  border: 1px solid var(--container-border);
   padding: 0.3em 0.6em;
   border-radius: 0.5em;
   width: auto;
@@ -45,21 +60,21 @@ $comment-detail-filename-color: #6b7280;
   padding-left: 0.8em;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  background-color: $comment-detail-background;
-  border: 1px solid $comment-detail-border;
+  background-color: var(--comment-detail-background);
+  border: 1px solid var(--comment-detail-border);
   margin-top: 0.5em;
   border-radius: 0.5em;
 
 
   &:hover {
-    background-color: $comment-detail-background-hover;
+    background-color: var(--comment-detail-background-hover);
     cursor: pointer;
-    border: 1px solid $comment-detail-border;
+    border: 1px solid var(--comment-detail-border);
     border-radius: 0.5em;
   }
 
   .comment-text {
-    color: $comment-detail-text-color;
+    color: var(--comment-detail-text-color);
     font-size: 0.95rem;
     margin-bottom: 0.3rem;
     white-space: nowrap;
@@ -69,13 +84,13 @@ $comment-detail-filename-color: #6b7280;
 
   .comment-file {
     font-size: 0.85rem;
-    color: $comment-detail-filename-color;
+    color: var(--comment-detail-filename-color);
     word-break: break-all;
   }
 }
 
 .arrow {
-  border: solid black;
+  border: solid var(--comment-detail-text-color);
   border-width: 0 2px 2px 0;
   display: inline-block;
   padding: 4px;
