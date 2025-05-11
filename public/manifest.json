@@ -8,11 +8,7 @@
     "48": "icons/logo48.png",
     "128": "icons/logo128.png"
   },
-  "permissions": [
-    "activeTab",
-    "scripting",
-    "storage"
-  ],
+  "permissions": [],
   "content_scripts": [
     {
       "matches": [
