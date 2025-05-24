@@ -9,11 +9,11 @@ import {
 } from '../../constants';
 import { createDivElement } from './helpers';
 
-
 export const renderCommentsLeftToAction = (
   commentsLeftToActionText: string,
   comments: CommentData[],
-  expandCommentDetails: boolean
+  expandCommentDetails: boolean,
+  showDropdownIcon: boolean = true
 ) => {
   const headerContainer = document.querySelector(PR_HEADER_CONTAINER_SELECTOR);
 
@@ -23,9 +23,10 @@ export const renderCommentsLeftToAction = (
   const innerContainer = createDivElement(INNER_CONTAINER_CLASS);
 
   const commentsLeftToActionElementContainer = createDivElement(COMMENTS_LEFT_TO_ACTION_HEADER_CLASS, commentsLeftToActionText);
-  const dropdownIcon = document.createElement('span');
+
+  let dropdownIcon = document.createElement('span');
   dropdownIcon.classList.add('arrow', 'right');
-  commentsLeftToActionElementContainer.appendChild(dropdownIcon);
+  showDropdownIcon && commentsLeftToActionElementContainer.appendChild(dropdownIcon);
 
   const commentDetailsContainer = createDivElement(COMMENT_DETAILS_CONTAINER_CLASS);
   commentDetailsContainer.style.display = expandCommentDetails ? 'flex' : 'none';
