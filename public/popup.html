@@ -1,63 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Privacy Policy</title>
+  <title>Extension Popup</title>
   <style>
       body {
-          font-family: Arial, sans-serif;
-          margin: 40px auto;
-          max-width: 800px;
-          padding: 20px;
-          background-color: #ffffff;
-          color: #333;
-          line-height: 1.6;
-      }
-
-      h1 {
-          font-size: 28px;
-          color: #222;
+          width: 300px;
+          padding: 10px;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", Helvetica, Arial, sans-serif;
       }
 
       h2 {
-          font-size: 20px;
-          margin-top: 1.5em;
+          margin-bottom: 5px;
       }
 
-      p {
-          margin: 1em 0;
+      h3 {
+          font-size: 14px;
+          color: #555;
+          margin-top: 0;
+      }
+
+      ul {
+          padding-left: 20px;
+      }
+
+      li {
+          margin-bottom: 5px;
       }
   </style>
 </head>
 <body>
-<h1>Privacy Policy for GitHub PR Comment Tracker</h1>
+<h2>GitHub PR Comment Tracker</h2>
+<h3>Never miss an important comment again.</h3>
 
-<h2>Data Collection and Use</h2>
+<p>This extension helps you track and jump to <strong>comments that still need action</strong> in any GitHub PR.</p>
+
 <p>
-  This extension does not collect, store, or transmit any personal data. It operates entirely within the user's browser,
-  analyzing and displaying information from GitHub pull requests in real-time. No data is sent to external servers or
-  stored outside the user's device.
+  A comment is considered <strong>actioned</strong> if:
 </p>
 
-<h2>Use of Publicly Available Information</h2>
+<ul>
+  <li><img src="icons/check_mark.svg" width="16" style="vertical-align: middle; margin-right: 4px;"> It has been marked
+    as resolved
+  </li>
+  <li><img src="icons/thumb.svg" width="16" style="vertical-align: middle; margin-right: 4px;"> It has a reaction</li>
+  <li><img src="icons/write.svg" width="16" style="vertical-align: middle; margin-right: 4px;"> The author has replied
+    last in the thread
+  </li>
+</ul>
+
 <p>
-  The extension may read publicly visible data on GitHub pull request pages — such as usernames and comment authors —
-  solely for the purpose of identifying and displaying which comments may still require action. This data is used only
-  during the active session and is not saved, transmitted, or shared.
+  All other comments are shown as <strong>"left to action"</strong>.
 </p>
 
-<h2>How the Extension Works</h2>
-<p>
-  The extension identifies comments on GitHub pull requests that likely require further action. It filters out resolved
-  threads, comments with emoji reactions, and those where the last reply is from the PR author. These actionable
-  comments are listed in a dropdown at the top of the page, allowing users to jump directly to them.
-</p>
+<p>Click a comment in the list to scroll to it instantly on the PR page.</p>
 
-<h2>Data Security</h2>
-<p>
-  All data processed by the extension is handled locally in the user's browser. The extension does not use any form of
-  persistent storage, and no information is accessible to third parties.
-</p>
+<p>Check the privacy policy <a href="privacy_policy.html">here</a></p>
 </body>
 </html>
