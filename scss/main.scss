@@ -8,7 +8,6 @@
   --comment-detail-filename-color: #6b7280;
 }
 
-
 @media (prefers-color-scheme: dark) {
   :root {
     --container-background: #1f2937;
@@ -64,7 +63,6 @@
   border: 1px solid var(--comment-detail-border);
   margin-top: 0.5em;
   border-radius: 0.5em;
-
 
   &:hover {
     background-color: var(--comment-detail-background-hover);

@@ -7,48 +7,44 @@ const outputPath = 'dist';
 const entryPoints = {
   main: [
     path.resolve(__dirname, 'src', 'main.ts'),
-    path.resolve(__dirname, 'scss', 'main.scss')
+    path.resolve(__dirname, 'scss', 'main.scss'),
   ],
-  background: path.resolve(__dirname, 'src', 'background.ts')
+  background: path.resolve(__dirname, 'src', 'background.ts'),
 };
 
 module.exports = {
   entry: entryPoints,
   output: {
     path: path.join(__dirname, outputPath),
-    filename: '[name].js'
+    filename: '[name].js',
   },
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.(sa|sc)ss$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader'
-        ]
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(jpg|jpeg|png|gif|woff|woff2|eot|ttf|svg)$/i,
-        use: 'url-loader?limit=1024'
-      }
-    ]
+        use: 'url-loader?limit=1024',
+      },
+    ],
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: '.', to: '.', context: 'public' }]
+      patterns: [{ from: '.', to: '.', context: 'public' }],
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css'
+      filename: '[name].css',
     }),
-    new Dotenv()
-  ]
+    new Dotenv(),
+  ],
 };
