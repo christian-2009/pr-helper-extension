@@ -29,8 +29,24 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(sa|sc)ss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                includePaths: [path.resolve(__dirname, 'scss')],
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(jpg|jpeg|png|gif|woff|woff2|eot|ttf|svg)$/i,

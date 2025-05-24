@@ -11,8 +11,15 @@
   "permissions": [],
   "content_scripts": [
     {
-      "matches": ["https://github.com/*"],
-      "js": ["main.js"]
+      "matches": [
+        "https://github.com/*"
+      ],
+      "js": [
+        "main.js"
+      ],
+      "css": [
+        "main.css"
+      ]
     }
   ],
   "action": {
