@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 tests/__fixtures__/comment_with_reply_mock.html
+
+dist.zip

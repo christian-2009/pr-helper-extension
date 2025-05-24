@@ -1,7 +1,7 @@
 {
   "name": "GitHub PR Comment Tracker",
   "description": "Track and jump to comments that still need action in any GitHub PR.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifest_version": 3,
   "icons": {
     "16": "icons/logo16.png",
