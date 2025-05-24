@@ -1,8 +1,7 @@
 import { COMMENT_DETAILS_CONTAINER_CLASS } from '../../src/constants';
 
 export const buildCommentDetails = (commentDetailText: string) => {
-  const mockHtml =
-    `
+  const mockHtml = `
     <div>${commentDetailText}</div>
     `;
   const mockHtmlElement = document.createElement('div');

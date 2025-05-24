@@ -1,6 +1,9 @@
 import { displayManager } from '../../../src/modules/displayManager/displayManager';
 import { screen } from '@testing-library/dom';
-import { COMMENTS_LEFT_TO_ACTION_HEADER_CLASS, OUTER_CONTAINER_CLASS } from '../../../src/constants';
+import {
+  COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
+  OUTER_CONTAINER_CLASS,
+} from '../../../src/constants';
 import { CommentData } from '../../../src/modules/CommentData';
 import { buildCommentData } from '../../testdata/commentDataBuilder';
 import { buildCommentDetails } from '../../testdata/commentDetailsBuilder';
@@ -24,48 +27,89 @@ describe('display manager', () => {
       displayManager(8, 20, mockComments);
 
       // Then
-      expect(screen.getByText('8 comments left to action (20 total)')).toBeInTheDocument();
+      expect(
+        screen.getByText('8 comments left to action (20 total)'),
+      ).toBeInTheDocument();
     });
 
     it.each([
       [9, 20],
       [8, 21],
       [8, 19],
-      [9, 19]
-    ])('renders updated comments left to action comments correctly if there is one already in the DOM', (
-      newActionedComments,
-      newTotalComments
-    ) => {
+      [9, 19],
+    ])(
+      'renders updated comments left to action comments correctly if there is one already in the DOM',
+      (newActionedComments, newTotalComments) => {
+        // Given
+        const mockComments = Array.of<CommentData>();
+        renderInitialCommentLeftToActionElement(
+          '8 comments left to action (20 total)',
+        );
+
+        // When
+        displayManager(newActionedComments, newTotalComments, mockComments);
+
+        // Then
+        expect(
+          screen.getByText(
+            `${newActionedComments} comments left to action (${newTotalComments} total)`,
+          ),
+        ).toBeInTheDocument();
+        expect(
+          screen.queryByText('8 comments left to action (20 total)'),
+        ).not.toBeInTheDocument();
+      },
+    );
+
+    it.each([0, 1])(
+      'should remove comments left to actions comments section when total comments are 0 and numberOfCommentsLeftToAction is %s',
+      (numberOfCommentsLeftToAction: number) => {
+        // Given
+        const mockComments = Array.of<CommentData>();
+        renderInitialCommentLeftToActionElement(
+          '2 comments left to action (20 total)',
+        );
+
+        // When
+        displayManager(numberOfCommentsLeftToAction, 0, mockComments);
+
+        // Then
+        expect(
+          screen.queryByText(/comments left to action/i),
+        ).not.toBeInTheDocument();
+      },
+    );
+
+    it('should show correct text when all comments are actioned', () => {
       // Given
       const mockComments = Array.of<CommentData>();
-      renderInitialCommentLeftToActionElement('8 comments left to action (20 total)');
+      renderInitialCommentLeftToActionElement(
+        '2 comments left to action (20 total)',
+      );
 
       // When
-      displayManager(newActionedComments, newTotalComments, mockComments);
+      displayManager(0, 20, mockComments);
 
       // Then
-      expect(screen.getByText(`${newActionedComments} comments left to action (${newTotalComments} total)`)).toBeInTheDocument();
-      expect(screen.queryByText('8 comments left to action (20 total)')).not.toBeInTheDocument();
-    });
-
-    it('should remove comments left to actions comments section if there are no comments on pr currently', () => {
-      // Given
-      const mockComments = Array.of<CommentData>();
-      renderInitialCommentLeftToActionElement('2 comments left to action (20 total)');
-
-      // When
-      displayManager(0, 0, mockComments);
-
-      // Then
-      expect(screen.queryByText(/comments left to action/i)).not.toBeInTheDocument();
+      expect(
+        screen.getByText('All comments have been actioned!'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(/comments left to action/i),
+      ).not.toBeInTheDocument();
     });
 
     it('should use comment in header if there is only 1 comment', () => {
+      // Given
       const mockComments = Array.of<CommentData>();
 
+      // When
       displayManager(1, 20, mockComments);
 
-      expect(screen.getByText('1 comment left to action (20 total)')).toBeInTheDocument();
+      // then
+      expect(
+        screen.getByText('1 comment left to action (20 total)'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -86,8 +130,10 @@ describe('display manager', () => {
       expect(mockCommentElement).toBeInTheDocument();
       mockCommentElement.click();
       expect(scrollMock).toHaveBeenCalled();
-      
-      expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
+
+      expect(
+        screen.queryByText("reply comment we don't care about"),
+      ).not.toBeInTheDocument();
       expect(screen.getByText('file')).toBeInTheDocument();
     });
 
@@ -96,7 +142,9 @@ describe('display manager', () => {
       renderInitialCommentLeftToActionElement();
       const firstCommentDetail = 'first comment';
       const firstCommentData = buildCommentData(firstCommentDetail, 'file');
-      document.querySelector(OUTER_CONTAINER_CLASS)?.appendChild(buildCommentDetails(firstCommentDetail));
+      document
+        .querySelector(OUTER_CONTAINER_CLASS)
+        ?.appendChild(buildCommentDetails(firstCommentDetail));
 
       const nextCommentData = buildCommentData('next comment', 'file2');
 
@@ -111,11 +159,38 @@ describe('display manager', () => {
     });
   });
 
+  describe('dropdown icon', () => {
+    it.each([
+      [10, true],
+      [1, true],
+      [0, false],
+    ])(
+      'should render dropdown correctly when there are %s comments left to action',
+      (numberOfCommentsLeftToAction: number, expectDropdownIcon: boolean) => {
+        // Given
+        const mockComments = Array.of<CommentData>();
+
+        // When
+        displayManager(numberOfCommentsLeftToAction, 20, mockComments);
+
+        // Then
+        const dropdownIcon = screen.queryByTestId('dropdown-icon');
+
+        expectDropdownIcon
+          ? expect(dropdownIcon).toBeInTheDocument()
+          : expect(dropdownIcon).not.toBeInTheDocument();
+      },
+    );
+  });
 });
 
-const renderInitialCommentLeftToActionElement = (text: string = '8 comments left to action (20 total)') => {
+const renderInitialCommentLeftToActionElement = (
+  text: string = '8 comments left to action (20 total)',
+) => {
   const commentsLeftToActionElement = document.createElement('div');
-  commentsLeftToActionElement.classList.add(COMMENTS_LEFT_TO_ACTION_HEADER_CLASS);
+  commentsLeftToActionElement.classList.add(
+    COMMENTS_LEFT_TO_ACTION_HEADER_CLASS,
+  );
   commentsLeftToActionElement.textContent = text;
 
   const commentsLeftToActionElementContainer = document.createElement('div');
@@ -125,6 +200,3 @@ const renderInitialCommentLeftToActionElement = (text: string = '8 comments left
 
   document.body.appendChild(commentsLeftToActionElementContainer);
 };
-
-
-

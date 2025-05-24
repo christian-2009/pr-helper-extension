@@ -6,57 +6,65 @@ describe('dataExtractor', () => {
   });
 
   describe('unresolvedComments', () => {
-    it.each(
-      [
-        [1, 0],
-        [0, 1],
-        [1, 1],
-        [1, 2],
-        [2, 1]
-      ]
-    )('returns unresolved comments correctly', (
-      numberOfUnresolvedComments: number,
-      numberOfResolvedComments: number
-    ) => {
-      // Given
-      setupDomWithResolvedAndUnresolvedComments(numberOfUnresolvedComments, numberOfResolvedComments);
+    it.each([
+      [1, 0],
+      [0, 1],
+      [1, 1],
+      [1, 2],
+      [2, 1],
+    ])(
+      'returns unresolved comments correctly',
+      (
+        numberOfUnresolvedComments: number,
+        numberOfResolvedComments: number,
+      ) => {
+        // Given
+        setupDomWithResolvedAndUnresolvedComments(
+          numberOfUnresolvedComments,
+          numberOfResolvedComments,
+        );
 
-      // When
-      const actual = dataExtractor().unresolvedComments;
+        // When
+        const actual = dataExtractor().unresolvedComments;
 
-      // Then
-      expect(actual.length).toBe(numberOfUnresolvedComments);
-    });
+        // Then
+        expect(actual.length).toBe(numberOfUnresolvedComments);
+      },
+    );
   });
 
   describe('resolvedComments', () => {
-    it.each(
-      [
-        [1, 0],
-        [0, 1],
-        [1, 1],
-        [1, 2],
-        [2, 1]
-      ]
-    )('returns resolved comments correctly', (
-      numberOfUnresolvedComments: number,
-      numberOfResolvedComments: number
-    ) => {
-      // Given
-      setupDomWithResolvedAndUnresolvedComments(numberOfUnresolvedComments, numberOfResolvedComments);
+    it.each([
+      [1, 0],
+      [0, 1],
+      [1, 1],
+      [1, 2],
+      [2, 1],
+    ])(
+      'returns resolved comments correctly',
+      (
+        numberOfUnresolvedComments: number,
+        numberOfResolvedComments: number,
+      ) => {
+        // Given
+        setupDomWithResolvedAndUnresolvedComments(
+          numberOfUnresolvedComments,
+          numberOfResolvedComments,
+        );
 
-      // When
-      const actual = dataExtractor().resolvedComments;
+        // When
+        const actual = dataExtractor().resolvedComments;
 
-      // Then
-      expect(actual.length).toBe(numberOfResolvedComments);
-    });
+        // Then
+        expect(actual.length).toBe(numberOfResolvedComments);
+      },
+    );
   });
 });
 
 const setupDomWithResolvedAndUnresolvedComments = (
   numberOfUnresolvedComments: number,
-  numberOfResolvedComments: number
+  numberOfResolvedComments: number,
 ) => {
   for (let i = 0; i < numberOfUnresolvedComments; i++) {
     const unresolvedComment = document.createElement('div');
@@ -69,5 +77,4 @@ const setupDomWithResolvedAndUnresolvedComments = (
     resolvedComment.setAttribute('data-resolved', 'true');
     document.body.appendChild(resolvedComment);
   }
-
 };
