@@ -48,23 +48,43 @@ describe('display manager', () => {
       expect(screen.queryByText('8 comments left to action (20 total)')).not.toBeInTheDocument();
     });
 
-    it('should remove comments left to actions comments section if there are no comments on pr currently', () => {
+    it.each(
+      [0, 1]
+    )('should remove comments left to actions comments section when total comments are 0 and numberOfCommentsLeftToAction is %s', (
+      numberOfCommentsLeftToAction: number
+    ) => {
       // Given
       const mockComments = Array.of<CommentData>();
       renderInitialCommentLeftToActionElement('2 comments left to action (20 total)');
 
       // When
-      displayManager(0, 0, mockComments);
+      displayManager(numberOfCommentsLeftToAction, 0, mockComments);
 
       // Then
       expect(screen.queryByText(/comments left to action/i)).not.toBeInTheDocument();
     });
 
+    it('should show correct text when all comments are actioned', () => {
+      // Given
+      const mockComments = Array.of<CommentData>();
+      renderInitialCommentLeftToActionElement('2 comments left to action (20 total)');
+
+      // When
+      displayManager(0, 20, mockComments);
+
+      // Then
+      expect(screen.getByText('All comments have been actioned!')).toBeInTheDocument();
+      expect(screen.queryByText(/comments left to action/i)).not.toBeInTheDocument();
+    });
+
     it('should use comment in header if there is only 1 comment', () => {
+      // Given
       const mockComments = Array.of<CommentData>();
 
+      // When
       displayManager(1, 20, mockComments);
 
+      // then
       expect(screen.getByText('1 comment left to action (20 total)')).toBeInTheDocument();
     });
   });
@@ -86,7 +106,7 @@ describe('display manager', () => {
       expect(mockCommentElement).toBeInTheDocument();
       mockCommentElement.click();
       expect(scrollMock).toHaveBeenCalled();
-      
+
       expect(screen.queryByText('reply comment we don\'t care about')).not.toBeInTheDocument();
       expect(screen.getByText('file')).toBeInTheDocument();
     });
@@ -111,6 +131,22 @@ describe('display manager', () => {
     });
   });
 
+  describe('dropdown icon', () => {
+    it.each([[10, true], [1, true], [0, false]]
+    )
+    ('should render dropdown correctly when there are %s comments left to action', (
+      numberOfCommentsLeftToAction: number
+    ) => {
+      // Given
+      const mockComments = Array.of<CommentData>();
+
+      // When
+      displayManager(numberOfCommentsLeftToAction, 20, mockComments);
+
+      // Then
+
+    });
+  });
 });
 
 const renderInitialCommentLeftToActionElement = (text: string = '8 comments left to action (20 total)') => {
